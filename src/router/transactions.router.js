@@ -1,9 +1,10 @@
 const exrpress = require('express');
-const { getTransactions } = require('../controllers/transactions.controller');
+const { getTransactions, createTransactions } = require('../controllers/transactions.controller');
 
 const router = exrpress.Router();
 
 router
-  .get('/co', getTransactions);
+  .post('/transactions/:id', createTransactions)
+  .get('/transactions', getTransactions);
 
 module.exports = router;

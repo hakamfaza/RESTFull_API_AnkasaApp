@@ -9,16 +9,16 @@ const { failed } = require('./src/utils/createResponse');
 // deklarasi express
 const app = express();
 
+app.use(cors({
+  origin: '*',
+}));
 // middleware
 app.use(express.json());
 app.use(
-  helmet({
-    crossOriginEmbedderPolicy: false,
-    crossOriginResourcePolicy: false,
-  }),
+  helmet(),
 );
 app.use(xss());
-app.use(cors());
+
 app.use(express.static('public'));
 
 // root router

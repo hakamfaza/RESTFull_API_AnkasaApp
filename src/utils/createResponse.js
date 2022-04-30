@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 module.exports = {
   success: (res, data) => {
     const {
