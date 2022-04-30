@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 const express = require('express');
 const helmet = require('helmet');
 const xss = require('xss-clean');
@@ -23,6 +24,7 @@ app.use(express.static('public'));
 // root router
 app.get('/', (req, res) => res.send(`${APP_NAME} API - ${NODE_ENV[0].toUpperCase() + NODE_ENV.slice(1)}`));
 // main router
+app.use(require('./src/router/transactions.router'));
 
 // 404 router
 app.use((req, res) => {
