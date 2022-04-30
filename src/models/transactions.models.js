@@ -33,6 +33,14 @@ const transactionsModels = {
       resolve(result);
     });
   }),
+  deleteTransactions: (id) => new Promise((resolve, reject) => {
+    db.query('DELETE FROM transactions WHERE id=$1', [id], (err, result) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(result);
+    });
+  }),
 };
 
 module.exports = transactionsModels;

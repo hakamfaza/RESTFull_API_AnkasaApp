@@ -95,6 +95,23 @@ const transactionsController = {
       });
     }
   },
+  deleteTransactions: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const transaction = await transactionsModels.deleteTransactions(id);
+      success(res, {
+        code: 500,
+        payload: transaction,
+        message: 'successs delete transactions!',
+      });
+    } catch (error) {
+      failed(res, {
+        code: 500,
+        payload: error.message,
+        message: 'internal server error!',
+      });
+    }
+  },
 };
 
 module.exports = transactionsController;
