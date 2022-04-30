@@ -1,0 +1,56 @@
+const db = require('../config/db');
+
+module.exports = {
+  register: (body) => new Promise((resolve, reject) => {
+    const {
+      id,
+      name,
+      email,
+      phone,
+      city,
+      address,
+      postalCode,
+      password,
+      level = 1,
+      createdDate,
+      isVerified = 0,
+      photo = '',
+    } = body;
+
+    db.query(
+      'INSERT INTO users (id, name, email, phone, city, address, postal_code, password, level, created_date, is_verified, photo) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING id',
+      [
+        id,
+        name,
+        email,
+        phone,
+        city,
+        address,
+        postalCode,
+        password,
+        level,
+        createdDate,
+        isVerified,
+        photo,
+      ],
+      (error, result) => {
+        if (error) {
+          reject(error);
+        }
+        resolve(result);
+      },
+    );
+  }),
+  updateToken: (id, token) => new Promise((resolve, reject) => {
+    db.query(
+      'UPDATE users SET token=$1 WHERE id=$2',
+      [token, id],
+      (error, result) => {
+        if (error) {
+          reject(error);
+        }
+        resolve(result);
+      },
+    );
+  }),
+};
