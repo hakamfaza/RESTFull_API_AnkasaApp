@@ -25,6 +25,14 @@ const transactionsModels = {
       resolve(result);
     });
   }),
+  updateTransaction: (setData) => new Promise((resolve, reject) => {
+    db.query('UPDATE transactions SET is_paid=$1, seat=$2 WHERE product_id=$3 AND user_id=$4 AND id=$5', [setData.is_paid, setData.seat, setData.product_id, setData.user_id, setData.id], (err, result) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(result);
+    });
+  }),
 };
 
 module.exports = transactionsModels;

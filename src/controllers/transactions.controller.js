@@ -63,6 +63,38 @@ const transactionsController = {
       });
     }
   },
+  updateTransaction: async (req, res) => {
+    try {
+      const setData = {
+        product_id: req.body.productId,
+        is_paid: req.body.isPaid,
+        seat: req.body.seat,
+        user_id: req.body.userId,
+        id: req.params.id,
+      };
+
+      const transactions = await transactionsModels.updateTransaction(setData);
+      if (transactions.rowCount > 0) {
+        success(res, {
+          code: 200,
+          payload: transactions,
+          message: 'update transaction success!',
+        });
+      } else {
+        failed(res, {
+          code: 500,
+          payload: null,
+          message: 'failed to update!',
+        });
+      }
+    } catch (error) {
+      failed(res, {
+        code: 500,
+        payload: error.message,
+        message: 'internal server error!',
+      });
+    }
+  },
 };
 
 module.exports = transactionsController;
