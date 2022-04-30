@@ -45,6 +45,24 @@ const transactionsController = {
       });
     }
   },
+  getDetailTransactions: async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const transactions = await transactionsModels.getDetailTransactions(id);
+      success(res, {
+        code: 200,
+        payload: transactions.rows[0],
+        message: 'get detail transactions success!',
+      });
+    } catch (error) {
+      failed(res, {
+        code: 500,
+        payload: error.message,
+        message: 'internal server error!',
+      });
+    }
+  },
 };
 
 module.exports = transactionsController;

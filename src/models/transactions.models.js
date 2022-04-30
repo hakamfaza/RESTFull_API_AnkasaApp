@@ -17,6 +17,14 @@ const transactionsModels = {
       resolve(result);
     }));
   }),
+  getDetailTransactions: (id) => new Promise((resolve, reject) => {
+    db.query('SELECT * FROM transactions WHERE id=$1', [id], (err, result) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(result);
+    });
+  }),
 };
 
 module.exports = transactionsModels;
