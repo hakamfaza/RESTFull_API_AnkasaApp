@@ -53,4 +53,29 @@ module.exports = {
       },
     );
   }),
+  checkEmailToken: (token) => new Promise((resolve, reject) => {
+    console.log(token);
+    db.query(
+      'SELECT * FROM users WHERE token=$1',
+      [token],
+      (error, result) => {
+        if (error) {
+          reject(error);
+        }
+        resolve(result);
+      },
+    );
+  }),
+  activateEmail: (id) => new Promise((resolve, reject) => {
+    db.query(
+      'UPDATE users SET is_verified=true WHERE id=$1',
+      [id],
+      (error, result) => {
+        if (error) {
+          reject(error);
+        }
+        resolve(result);
+      },
+    );
+  }),
 };
