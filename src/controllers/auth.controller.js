@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const { v4: uuidv4 } = require('uuid');
 const authModel = require('../models/auth.model');
+const userModel = require('../models/user.model');
 const sendEmail = require('../utils/email/sendEmail');
 const activateAccountEmail = require('../utils/email/activateAccountEmail');
 const jwtToken = require('../utils/generateJwtToken');
@@ -11,6 +12,16 @@ const { APP_NAME, EMAIL_FROM, API_URL } = require('../utils/env');
 module.exports = {
   register: async (req, res) => {
     try {
+      const user = await userModel.selectByEmail(req.body.email);
+      if (user.rowCount) {
+        failed(res, {
+          code: 409,
+          payload: 'Email already exist',
+          message: 'Register Failed',
+        });
+        return;
+      }
+
       const password = await bcrypt.hash(req.body.password, 10);
       const token = crypto.randomBytes(30).toString('hex');
       const insertData = await authModel.register({
