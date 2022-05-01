@@ -95,4 +95,38 @@ module.exports = {
       });
     }
   },
+  remove: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const user = await userModel.selectById(id);
+
+      // jika user tidak ditemukan
+      if (!user.rowCount) {
+        failed(res, {
+          code: 404,
+          payload: `User with Id ${id} not found`,
+          message: 'Delete User Failed',
+        });
+        return;
+      }
+      await userModel.removeById(id);
+
+      // menghapus photo jika ada
+      if (user.rows[0].photo) {
+        deleteFile(`public/${user.rows[0].photo}`);
+      }
+
+      success(res, {
+        code: 200,
+        payload: null,
+        message: 'Delete User Success',
+      });
+    } catch (error) {
+      failed(res, {
+        code: 500,
+        payload: error.message,
+        message: 'Internal Server Error',
+      });
+    }
+  },
 };

@@ -51,4 +51,20 @@ module.exports = {
       },
     );
   }),
+  removeById: (id) => new Promise((resolve, reject) => {
+    db.query('DELETE FROM users WHERE id=$1', [id], (error, result) => {
+      if (error) {
+        reject(error);
+      }
+      resolve(result);
+    });
+  }),
+  countAll: () => new Promise((resolve, reject) => {
+    db.query('SELECT COUNT(*) FROM users', (error, result) => {
+      if (error) {
+        reject(error);
+      }
+      resolve(result);
+    });
+  }),
 };
