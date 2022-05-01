@@ -121,6 +121,23 @@ const transactionsController = {
       });
     }
   },
+  getTransactionsByUser: async (req, res) => {
+    try {
+      const { userId } = req.body;
+      const transactions = await transactionsModels.getTransactionByUser(userId);
+      success(res, {
+        code: 200,
+        payload: transactions.rows,
+        message: 'success get transactions by user!',
+      });
+    } catch (error) {
+      failed(res, {
+        code: 500,
+        payload: error.message,
+        message: 'internal server error!',
+      });
+    }
+  },
 };
 
 module.exports = transactionsController;
