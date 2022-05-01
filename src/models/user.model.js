@@ -29,4 +29,26 @@ module.exports = {
       },
     );
   }),
+  updateById: (id, body) => new Promise((resolve, reject) => {
+    const {
+      name,
+      email,
+      phone,
+      city,
+      address,
+      postalCode,
+      photo = '',
+    } = body;
+
+    db.query(
+      'UPDATE users SET name=$1, email=$2, phone=$3, city=$4, address=$5, postal_code=$6, photo=$7 WHERE id=$8',
+      [name, email, phone, city, address, postalCode, photo, id],
+      (error, result) => {
+        if (error) {
+          reject(error);
+        }
+        resolve(result);
+      },
+    );
+  }),
 };
