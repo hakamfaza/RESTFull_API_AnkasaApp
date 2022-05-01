@@ -98,12 +98,21 @@ const transactionsController = {
   deleteTransactions: async (req, res) => {
     try {
       const { id } = req.params;
-      const transaction = await transactionsModels.deleteTransactions(id);
-      success(res, {
-        code: 500,
-        payload: transaction,
-        message: 'successs delete transactions!',
-      });
+      const { userId } = req.body;
+      const transactions = await transactionsModels.deleteTransactions(id, userId);
+      if (transactions.rowCount) {
+        success(res, {
+          code: 200,
+          payload: transactions,
+          message: 'successs delete transactions!',
+        });
+      } else {
+        failed(res, {
+          code: 500,
+          payload: null,
+          message: 'you can\'t delete this!',
+        });
+      }
     } catch (error) {
       failed(res, {
         code: 500,

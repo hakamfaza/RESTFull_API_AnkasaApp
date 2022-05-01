@@ -33,8 +33,8 @@ const transactionsModels = {
       resolve(result);
     });
   }),
-  deleteTransactions: (id) => new Promise((resolve, reject) => {
-    db.query('DELETE FROM transactions WHERE id=$1', [id], (err, result) => {
+  deleteTransactions: (id, userId) => new Promise((resolve, reject) => {
+    db.query('DELETE FROM transactions WHERE id=$1 AND user_id=$2', [id, userId], (err, result) => {
       if (err) {
         reject(err);
       }
