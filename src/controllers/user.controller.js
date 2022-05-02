@@ -1,17 +1,22 @@
 // const bcrypt = require('bcrypt');
 const userModel = require('../models/user.model');
+const createPagination = require('../utils/createPagination');
 const { success, failed } = require('../utils/createResponse');
 const deleteFile = require('../utils/deleteFile');
 
 module.exports = {
   list: async (req, res) => {
     try {
-      const users = await userModel.selectAll();
+      const { page, limit } = req.query;
+      const count = await userModel.countAll();
+      const paging = createPagination(count.rows[0].count, page, limit);
+      const users = await userModel.selectAll(paging);
 
       success(res, {
         code: 200,
         payload: users.rows,
         message: 'Select List User Success',
+        pagination: paging.response,
       });
     } catch (error) {
       failed(res, {
