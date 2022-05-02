@@ -8,7 +8,7 @@ module.exports = {
 
       if (!user.rowCount) {
         next();
-      } else if (user.rows[0].verified === 1) {
+      } else if (user.rows[0].verified) {
         next();
       } else {
         failed(res, {
