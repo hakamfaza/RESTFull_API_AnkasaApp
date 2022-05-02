@@ -11,7 +11,8 @@ const transactionsController = {
         product_id: req.params.id,
         is_paid: req.body.isPaid,
         seat: req.body.seat,
-        user_id: req.body.userId,
+        // user_id: req.body.userId,
+        user_id: req.APP_DATA.tokenDecoded.id,
         id,
       };
 
@@ -69,7 +70,8 @@ const transactionsController = {
         product_id: req.body.productId,
         is_paid: req.body.isPaid,
         seat: req.body.seat,
-        user_id: req.body.userId,
+        // user_id: req.body.userId,
+        user_id: req.APP_DATA.tokenDecoded.id,
         id: req.params.id,
       };
 
@@ -123,7 +125,8 @@ const transactionsController = {
   },
   getTransactionsByUser: async (req, res) => {
     try {
-      const { userId } = req.body;
+      // const { userId } = req.body;
+      const userId = req.APP_DATA.tokenDecoded.id;
       const transactions = await transactionsModels.getTransactionByUser(userId);
       success(res, {
         code: 200,
