@@ -3,13 +3,14 @@ const {
   list, detail, update, remove,
 } = require('../controllers/user.controller');
 const upload = require('../middlewares/upload');
+const jwtAuth = require('../middlewares/jwtAuth');
 
 const router = express.Router();
 
 router
-  .get('/user', list)
-  .get('/user/:id', detail)
-  .put('/user/:id', upload, update)
-  .delete('/user/:id', upload, remove);
+  .get('/user', jwtAuth, list)
+  .get('/user/:id', jwtAuth, detail)
+  .put('/user/:id', jwtAuth, upload, update)
+  .delete('/user/:id', jwtAuth, upload, remove);
 
 module.exports = router;
