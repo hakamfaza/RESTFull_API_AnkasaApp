@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 const { Pool } = require('pg');
 const {
   NODE_ENV,
@@ -29,7 +30,7 @@ db.connect((err) => {
     console.log(err.message);
     process.exit(1);
   }
-  console.log('Database berhasil terhubung.');
+  console.log('Database is connected.');
 });
 
 module.exports = db;
