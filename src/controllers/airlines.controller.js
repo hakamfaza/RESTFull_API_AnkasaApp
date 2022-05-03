@@ -1,11 +1,11 @@
-const airlinesModel = require("../models/airlines.model");
-const { success, failed } = require("../utils/createResponse");
-const { v4: uuidv4 } = require("uuid");
+const { v4: uuidv4 } = require('uuid');
+const airlinesModel = require('../models/airlines.model');
+const { success, failed } = require('../utils/createResponse');
 
 const airlinesController = {
   list: async (req, res) => {
     try {
-      const str = "";
+      const str = '';
       const search = req.query.search ? req.query.search : str;
       const { page, limit } = req.query;
       const pageValue = page ? Number(page) : 1;
@@ -24,7 +24,7 @@ const airlinesController = {
           const data = {
             code: 200,
             payload: result.rows,
-            message: "get all data success",
+            message: 'get all data success',
             pagination,
           };
           success(res, data);
@@ -33,7 +33,7 @@ const airlinesController = {
           const data = {
             code: 404,
             payload: err,
-            message: "get all data failed p",
+            message: 'get all data failed p',
           };
           failed(res, data);
         });
@@ -41,14 +41,14 @@ const airlinesController = {
       const data = {
         code: 404,
         payload: err,
-        message: "get all data failed o",
+        message: 'get all data failed o',
       };
       failed(res, data);
     }
   },
   detail: (req, res) => {
     try {
-      const id = req.params.id;
+      const { id } = req.params;
       airlinesModel
         .detailAirlines(id)
         .then((result) => {
@@ -56,23 +56,22 @@ const airlinesController = {
             const data = {
               code: 404,
               payload: result.rows[0],
-              message: "get deatil airline failed",
+              message: 'get deatil airline failed',
             };
             return failed(res, data);
-          } else {
-            const data = {
-              code: 200,
-              payload: result.rows[0],
-              message: "get detail airline success",
-            };
-            success(res, data);
           }
+          const data = {
+            code: 200,
+            payload: result.rows[0],
+            message: 'get detail airline success',
+          };
+          success(res, data);
         })
         .catch((err) => {
           const data = {
             code: 404,
             payload: err,
-            message: "get deatil airline failed",
+            message: 'get deatil airline failed',
           };
           failed(res, data);
         });
@@ -80,19 +79,21 @@ const airlinesController = {
       const data = {
         code: 404,
         payload: err,
-        message: "get deatil airline failed",
+        message: 'get deatil airline failed',
       };
       failed(res, data);
     }
   },
   input: async (req, res) => {
     try {
-      const body = req.body;
+      const { body } = req;
       const id = uuidv4();
       const file = req.file.filename;
-      const { name, pic, phone, date, isActive } = body;
-      if (!file || !name || !pic || !date || !phone || !isActive) {
-        throw Error("parameter cannot blank");
+      const {
+        name, pic, phone, date,
+      } = body;
+      if (!file || !name || !pic || !date || !phone) {
+        throw Error('parameter cannot blank');
       }
       const data = {
         id,
@@ -101,7 +102,7 @@ const airlinesController = {
         pic,
         phone,
         date,
-        isActive,
+        isActive: true,
       };
       airlinesModel
         .inputAirlines(data)
@@ -109,7 +110,7 @@ const airlinesController = {
           const data = {
             code: 200,
             payload: result,
-            message: "input data airline success",
+            message: 'input data airline success',
           };
           success(res, data);
         })
@@ -117,7 +118,7 @@ const airlinesController = {
           const data = {
             code: 404,
             payload: err,
-            message: "input data airline failed p",
+            message: 'input data airline failed p',
           };
           failed(res, data);
         });
@@ -125,23 +126,25 @@ const airlinesController = {
       const data = {
         code: 404,
         payload: err,
-        message: "input data airline failed o",
+        message: 'input data airline failed o',
       };
       failed(res, data);
     }
   },
   update: async (req, res) => {
     try {
-      const id = req.params.id;
-        const photo = req.file.filename;
-      const { name, pic, phone, date, isActive } = req.body;
+      const { id } = req.params;
+      const photo = req.file.filename;
+      const {
+        name, pic, phone, date, isActive,
+      } = req.body;
       airlinesModel
         .updateAirlines(id, photo, name, pic, phone, date, isActive)
         .then((result) => {
           const data = {
             code: 404,
             payload: result,
-            message: "success to update airlines",
+            message: 'success to update airlines',
           };
           success(res, data);
         })
@@ -149,7 +152,7 @@ const airlinesController = {
           const data = {
             code: 404,
             payload: err,
-            message: "failed to update airlines",
+            message: 'failed to update airlines',
           };
           failed(res, data);
         });
@@ -157,21 +160,21 @@ const airlinesController = {
       const data = {
         code: 404,
         payload: err,
-        message: "failed to update airlines",
+        message: 'failed to update airlines',
       };
       failed(res, data);
     }
   },
   deleted: async (req, res) => {
     try {
-      const id = req.params.id;
+      const { id } = req.params;
       airlinesModel
         .deleteAirlines(id)
         .then((result) => {
           const data = {
             code: 404,
             payload: result,
-            message: "success to delete airlines",
+            message: 'success to delete airlines',
           };
           success(res, data);
         })
@@ -179,7 +182,7 @@ const airlinesController = {
           const data = {
             code: 404,
             payload: err,
-            message: "failed to delete airlines",
+            message: 'failed to delete airlines',
           };
           failed(res, data);
         });
@@ -187,14 +190,14 @@ const airlinesController = {
       const data = {
         code: 404,
         payload: err,
-        message: "failed to delete airlines",
+        message: 'failed to delete airlines',
       };
       failed(res, data);
     }
   },
   control: async (req, res) => {
     try {
-      const id = req.params.id;
+      const { id } = req.params;
       const isActive = req.body;
       airlinesModel
         .airlinesControl(id, isActive)
@@ -202,7 +205,7 @@ const airlinesController = {
           const data = {
             code: 404,
             payload: result,
-            message: "managed to change the activeness of the airline",
+            message: 'managed to change the activeness of the airline',
           };
           success(res, data);
         })
@@ -210,7 +213,7 @@ const airlinesController = {
           const data = {
             code: 404,
             payload: err,
-            message: "failed to change airline activity",
+            message: 'failed to change airline activity',
           };
           failed(res, data);
         });
@@ -218,7 +221,7 @@ const airlinesController = {
       const data = {
         code: 404,
         payload: err,
-        message: "failed to change airline activity",
+        message: 'failed to change airline activity',
       };
       failed(res, data);
     }
