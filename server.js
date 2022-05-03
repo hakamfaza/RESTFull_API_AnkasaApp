@@ -5,6 +5,7 @@ const xss = require('xss-clean');
 const cors = require('cors');
 const { APP_NAME, NODE_ENV, PORT } = require('./src/utils/env');
 const { failed } = require('./src/utils/createResponse');
+const productRoute = require('./src/router/product.route')
 
 // deklarasi express
 const app = express();
@@ -24,6 +25,7 @@ app.use(express.static('public'));
 // root router
 app.get('/', (req, res) => res.send(`${APP_NAME} API - ${NODE_ENV[0].toUpperCase() + NODE_ENV.slice(1)}`));
 // main router
+app.use(productRoute)
 app.use(require('./src/router/transactions.router'));
 app.use(require('./src/router/auth.route'));
 app.use(require('./src/router/user.route'));
