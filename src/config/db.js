@@ -29,7 +29,7 @@ db.connect((err) => {
     console.log(err.message);
     process.exit(1);
   }
-  console.log('Database berhasil terhubung.');
+  console.log('Database connected successfully.');
 });
 
 module.exports = db;
