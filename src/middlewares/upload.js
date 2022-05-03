@@ -1,11 +1,11 @@
-const multer = require("multer");
-const path = require("path");
-const { failed } = require("../helpers/response");
+const multer = require('multer');
+const path = require('path');
+const { failed } = require('../utils/createResponse');
 
 const multerUpload = multer({
   storage: multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, "./public");
+      cb(null, './public');
     },
     filename: (req, file, cb) => {
       const ext = path.extname(file.originalname);
@@ -15,11 +15,11 @@ const multerUpload = multer({
   }),
   fileFilter: (req, file, cb) => {
     const ext = path.extname(file.originalname);
-    if (ext === ".jpg" || ext === ".png") {
+    if (ext === '.jpg' || ext === '.png') {
       cb(null, true);
     } else {
       const error = {
-        message: "file must be jpg or png",
+        message: 'file must be jpg or png',
       };
       cb(error, false);
     }
@@ -31,10 +31,14 @@ const multerUpload = multer({
 });
 
 const upload = (req, res, next) => {
-  const multerSingle = multerUpload.single("gambar");
+  const multerSingle = multerUpload.single('photo');
   multerSingle(req, res, (err) => {
     if (err) {
-      failed(res, err, "error", "gagal");
+      failed(res, {
+        code: 400,
+        payload: err.message,
+        message: 'Bad Request',
+      });
     } else {
       next();
     }
