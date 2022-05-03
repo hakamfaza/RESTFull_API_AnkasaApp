@@ -1,4 +1,3 @@
-const { v4: uuidv4 } = require('uuid');
 const { db } = require('../config/db');
 
 const CreditCardModel = {
@@ -20,9 +19,17 @@ const CreditCardModel = {
       resolve(results);
     });
   }),
+  getCreditCardByUser: (user_id) => new Promise((resolve, reject) => {
+    db.query('SELECT * FROM credit_card WHERE user_id = $1', [ user_id ], (error, results) => {
+      if (error) {
+        reject(error);
+      }
+      resolve(results);
+    });
+  }),
   // eslint-disable-next-line no-shadow
   insertCreditCard: (number, name, user_id, id) => new Promise((resolve, reject) => {
-    db.query('INSERT INTO credit_card (number, name, user_id, id) VALUES ($1, $2, $3, $4)', [ number, name, user_id, uuidv4() ], (error, results) => {
+    db.query('INSERT INTO credit_card (number, name, user_id, id) VALUES ($1, $2, $3, $4)', [ number, name, user_id, id ], (error, results) => {
       if (error) {
         reject(error);
       }
