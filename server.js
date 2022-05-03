@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 const express = require('express');
 const helmet = require('helmet');
 const xss = require('xss-clean');
@@ -9,23 +10,25 @@ const productRoute = require('./src/router/product.route')
 // deklarasi express
 const app = express();
 
+app.use(cors({
+  origin: '*',
+}));
 // middleware
 app.use(express.json());
 app.use(
-  helmet({
-    crossOriginEmbedderPolicy: false,
-    crossOriginResourcePolicy: false,
-  }),
+  helmet(),
 );
 app.use(xss());
-app.use(cors());
+
 app.use(express.static('public'));
 
 // root router
 app.get('/', (req, res) => res.send(`${APP_NAME} API - ${NODE_ENV[0].toUpperCase() + NODE_ENV.slice(1)}`));
 // main router
 app.use(productRoute)
-
+app.use(require('./src/router/transactions.router'));
+app.use(require('./src/router/auth.route'));
+app.use(require('./src/router/user.route'));
 // 404 router
 app.use((req, res) => {
   failed(res, {
