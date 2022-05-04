@@ -1,12 +1,13 @@
 const { v4: uuidv4 } = require('uuid');
 const productModel = require('../models/product.model');
 const { success, failed } = require('../utils/createResponse');
+const createPagination = require('../utils/createPagination');
 
 const productController = {
   getListProduct: async (req, res) => {
     try {
       const {
-        transitFiltered, airlinesFiltered, minPriceFiltered, maxPriceFiltered,
+        transitFiltered, airlinesFiltered, minPriceFiltered, maxPriceFiltered, page, limit
       } = req.query;
 
       const transit = transitFiltered || '';
@@ -14,11 +15,15 @@ const productController = {
       const minprice = minPriceFiltered || '';
       const maxprice = maxPriceFiltered || '';
 
+      const count = await productModel.countAll();
+      const paging = createPagination(count.rows[0].count, page, limit);
+
       await productModel.getAllProduct(transit, airline, minprice, maxprice)
         .then((result) => {
           success(res, {
             code: 200,
             payload: result.rows,
+            pagination: paging.response,
             message: 'get All product success',
           });
         })
