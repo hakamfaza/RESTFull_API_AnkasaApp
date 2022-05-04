@@ -5,7 +5,7 @@ const {
   selectByUserID,
   insert,
   update,
-  deleted
+  deleted,
 } = require('../controllers/credit_card.controller');
 
 const router = express.Router();
@@ -17,6 +17,6 @@ router
   .get('/credit_card/:user_id', jwtAuth, selectByUserID)
   .post('/credit_card', jwtAuth, insert)
   .put('/credit_card/:id', jwtAuth, update)
-  .delete('/credit_card/:id', jwtAuth, deleted)
+  .delete('/credit_card/:id', jwtAuth, deleted);
 
 module.exports = router;
