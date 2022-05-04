@@ -5,30 +5,29 @@ const xss = require('xss-clean');
 const cors = require('cors');
 const { APP_NAME, NODE_ENV, PORT } = require('./src/utils/env');
 const { failed } = require('./src/utils/createResponse');
-const airlinesRoute =require("./src/router/airlines.route")
-const productRoute = require('./src/router/product.route')
+const airlinesRoute = require('./src/router/airlines.route');
+const productRoute = require('./src/router/product.route');
 
 // deklarasi express
 const app = express();
 
-app.use(cors({
-  origin: '*',
-}));
-// middleware
 app.use(express.json());
 app.use(
-  helmet(),
+  helmet({
+    crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: false,
+  }),
 );
 app.use(xss());
-
+app.use(cors());
 app.use(express.static('public'));
 
 // root router
 app.get('/', (req, res) => res.send(`${APP_NAME} API - ${NODE_ENV[0].toUpperCase() + NODE_ENV.slice(1)}`));
 // main router
 
-app.use(airlinesRoute)
-app.use(productRoute)
+app.use(airlinesRoute);
+app.use(productRoute);
 app.use(require('./src/router/transactions.router'));
 app.use(require('./src/router/auth.route'));
 app.use(require('./src/router/user.route'));
