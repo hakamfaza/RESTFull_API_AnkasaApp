@@ -1,7 +1,7 @@
 const db = require('../config/db');
 
 const productModel = {
-  getAllProduct: (transit, airline, minprice, maxprice, origin, destination) => new Promise((resolve, reject) => {
+  getAllProduct: (transit, airline, minprice, maxprice, origin, destination, seatClass) => new Promise((resolve, reject) => {
     let sql = `SELECT products.origin, products.destination, products.price, products.seat_class,      products.stock,
                 products.transit_total, products.flight_date, products.airline_id, products.estimation,
                 products.created_date, products.code, products.gate, products.terminal, products.id, airlines.name
@@ -28,6 +28,10 @@ const productModel = {
     if (destination) {
       sql += ` AND LOWER(products.destination)='${destination.toLowerCase()}'`;
     }
+    if (seatClass) {
+      sql += ` AND LOWER(products.seat_class)='${seatClass.toLowerCase()}'`;
+    }
+
     db.query(sql, (err, result) => {
       if (err) {
         reject(err);
