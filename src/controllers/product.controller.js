@@ -7,18 +7,20 @@ const productController = {
   getListProduct: async (req, res) => {
     try {
       const {
-        transitFiltered, airlinesFiltered, minPriceFiltered, maxPriceFiltered, page, limit
+        transitFiltered, airlinesFiltered, minPriceFiltered, maxPriceFiltered, originFiltered, destinationFiltered, page, limit
       } = req.query;
 
       const transit = transitFiltered || '';
       const airline = airlinesFiltered || '';
       const minprice = minPriceFiltered || '';
       const maxprice = maxPriceFiltered || '';
+      const origin = originFiltered || '';
+      const destination = destinationFiltered || '';
 
       const count = await productModel.countAll();
       const paging = createPagination(count.rows[0].count, page, limit);
 
-      await productModel.getAllProduct(transit, airline, minprice, maxprice)
+      await productModel.getAllProduct(transit, airline, minprice, maxprice, origin, destination)
         .then((result) => {
           success(res, {
             code: 200,
