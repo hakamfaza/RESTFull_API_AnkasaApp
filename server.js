@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 const express = require('express');
 const helmet = require('helmet');
 const xss = require('xss-clean');
@@ -7,6 +6,7 @@ const { APP_NAME, NODE_ENV, PORT } = require('./src/utils/env');
 const { failed } = require('./src/utils/createResponse');
 const airlinesRoute = require('./src/router/airlines.route');
 const productRoute = require('./src/router/product.route');
+const creditCardRoute = require('./src/router/credit_card.route');
 
 // deklarasi express
 const app = express();
@@ -28,6 +28,7 @@ app.get('/', (req, res) => res.send(`${APP_NAME} API - ${NODE_ENV[0].toUpperCase
 
 app.use(airlinesRoute);
 app.use(productRoute);
+app.use(creditCardRoute);
 app.use(require('./src/router/transactions.router'));
 app.use(require('./src/router/auth.route'));
 app.use(require('./src/router/user.route'));

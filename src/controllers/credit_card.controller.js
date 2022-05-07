@@ -5,9 +5,9 @@
 /* eslint-disable no-trailing-spaces */
 /* eslint-disable camelcase */
 /* eslint-disable linebreak-style */
-const { v4: uuidv4 } = require('uuid');
-const { CreditCardModel } = require('../models/credit_card.model');
-const { success, failed } = require('../utils/createResponse');
+const { v4: uuidv4 } = require("uuid");
+const { CreditCardModel } = require("../models/credit_card.model");
+const { success, failed } = require("../utils/createResponse");
 
 const CreditCardController = {
   selectAll: async (req, res) => {
@@ -21,13 +21,13 @@ const CreditCardController = {
         });
       }
       return res.json({
-        message: 'Sorry, no recipes found',
+        message: "Sorry, no recipes found",
       });
     } catch (error) {
       return failed(res, {
         code: 500,
         payload: error.message,
-        message: 'Internal Server Error',
+        message: "Internal Server Error",
       });
     }
   },
@@ -43,13 +43,13 @@ const CreditCardController = {
         });
       }
       return res.json({
-        message: 'Sorry, the recipe has not been available',
+        message: "Sorry, the recipe has not been available",
       });
     } catch (error) {
       return failed(res, {
         code: 500,
         payload: error.message,
-        message: 'Internal Server Error',
+        message: "Internal Server Error",
       });
     }
   },
@@ -65,34 +65,28 @@ const CreditCardController = {
         });
       }
       return res.json({
-        message: 'Sorry, the recipe has not been available',
+        message: "Sorry, the recipe has not been available",
       });
     } catch (error) {
       return failed(res, {
         code: 500,
         payload: error.message,
-        message: 'Internal Server Error',
+        message: "Internal Server Error",
       });
     }
   },
   insert: async (req, res) => {
     const id = uuidv4();
-    const {
-      number,
-      name,
-      user_id
-    } = req.body;
+    const { number, name, user_id } = req.body;
 
-    const creditCardNumberCheck = !number || number === '';
-    const creditCardNameCheck = !name || name === '';
-    const userIDCheck = !user_id || user_id === '';
+    const creditCardNumberCheck = !number || number === "";
+    const creditCardNameCheck = !name || name === "";
+    const userIDCheck = !user_id || user_id === "";
 
-    if (
-      creditCardNumberCheck && creditCardNameCheck && userIDCheck
-    ) {
+    if (creditCardNumberCheck && creditCardNameCheck && userIDCheck) {
       return res.status(400).json({
-        status: 'failed',
-        message: 'All recipe data must be filled',
+        status: "failed",
+        message: "All recipe data must be filled",
       });
     }
 
@@ -106,22 +100,20 @@ const CreditCardController = {
       return success(res, {
         code: 200,
         payload: credit_card,
-        message: 'Credit Card Is Successfully Inserted',
+        message: "Credit Card Is Successfully Inserted",
       });
     } catch (error) {
       return failed(res, {
         code: 500,
         payload: error.message,
-        message: 'Internal Server Error',
+        message: "Internal Server Error",
       });
     }
   },
   update: async (req, res) => {
     try {
       const { id } = req.params;
-      const {
-        number, name, user_id
-      } = req.body;
+      const { number, name, user_id } = req.body;
       const credit_card = await CreditCardModel.updateCreditCard(
         number,
         name,
@@ -131,13 +123,13 @@ const CreditCardController = {
       success(res, {
         code: 200,
         payload: credit_card,
-        message: 'Credit Card Is Successfully Updated',
+        message: "Credit Card Is Successfully Updated",
       });
     } catch (error) {
       failed(res, {
         code: 500,
         payload: error.message,
-        message: 'Internal Server Error',
+        message: "Internal Server Error",
       });
     }
   },
@@ -148,18 +140,16 @@ const CreditCardController = {
       success(res, {
         code: 200,
         payload: credit_card,
-        message: 'Credit Card Is Successfully Deleted',
+        message: "Credit Card Is Successfully Deleted",
       });
     } catch (error) {
       failed(res, {
         code: 500,
         payload: error.message,
-        message: 'Internal Server Error',
+        message: "Internal Server Error",
       });
     }
-  }
+  },
 };
 
-module.exports = { 
-  CreditCardController,
-};
+module.exports = CreditCardController;
