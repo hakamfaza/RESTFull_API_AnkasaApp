@@ -32,6 +32,7 @@ app.use(creditCardRoute);
 app.use(require('./src/router/transactions.router'));
 app.use(require('./src/router/auth.route'));
 app.use(require('./src/router/user.route'));
+app.use(require('./src/router/destination.router'));
 
 // 404 router
 app.use((req, res) => {

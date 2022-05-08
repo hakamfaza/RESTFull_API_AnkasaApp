@@ -9,9 +9,8 @@ const transactionsController = {
 
       const setData = {
         product_id: req.params.id,
-        is_paid: req.body.isPaid,
+        is_paid: req.body.isPaid ? true : req.body.isPaid,
         seat: req.body.seat,
-        // user_id: req.body.userId,
         user_id: req.APP_DATA.tokenDecoded.id,
         id,
       };
@@ -70,7 +69,6 @@ const transactionsController = {
         product_id: req.body.productId,
         is_paid: req.body.isPaid,
         seat: req.body.seat,
-        // user_id: req.body.userId,
         user_id: req.APP_DATA.tokenDecoded.id,
         id: req.params.id,
       };
