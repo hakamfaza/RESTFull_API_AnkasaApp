@@ -76,7 +76,7 @@ const productModel = {
     });
   }),
   detailProduct: (id) => new Promise((resolve, reject) => {
-    db.query(`SELECT * FROM products INNER JOIN airlines ON products.airline_id = airlines.id WHERE id='${id}'`, (err, result) => {
+    db.query(`SELECT * FROM products INNER JOIN airlines ON products.airline_id = airlines.id WHERE products.id='${id}'`, (err, result) => {
       if (err) {
         reject(err);
       }
