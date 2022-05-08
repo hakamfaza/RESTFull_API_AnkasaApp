@@ -2,15 +2,15 @@ const db = require('../config/db');
 
 const destinationModels = {
   createDestination: (setData) => new Promise((resolve, reject) => {
-    db.query('INSERT INTO destination (id, country, place, image) VALUES ($1, $2, $3, $4)', [setData.id, setData.country, setData.place, setData.image], (err, result) => {
+    db.query('INSERT INTO destination (id, country, place, image, price, total_airline, date) VALUES ($1, $2, $3, $4, $5, $6, $7)', [setData.id, setData.country, setData.place, setData.image, setData.price, setData.totalAirline, setData.date], (err, result) => {
       if (err) {
         reject(err);
       }
       resolve(result);
     });
   }),
-  getDestination: () => new Promise((resolve, reject) => {
-    db.query('SELECT * FROM destination', (err, result) => {
+  getDestination: (sortType, limit) => new Promise((resolve, reject) => {
+    db.query(`SELECT * FROM destination ORDER BY date ${sortType} LIMIT ${limit}`, (err, result) => {
       if (err) {
         reject(err);
       }
@@ -26,8 +26,7 @@ const destinationModels = {
     });
   }),
   updateDestination: (setData) => new Promise((resolve, reject) => {
-    console.log(setData);
-    db.query('UPDATE destination SET country=$1, place=$2, image=$3 WHERE id=$4', [setData.country, setData.place, setData.image, setData.id], (err, result) => {
+    db.query('UPDATE destination SET country=$1, place=$2, image=$3, total_airline=$4, price=$5, date=$6 WHERE id=$7', [setData.country, setData.place, setData.image, setData.totalAirline, setData.price, setData.date, setData.id], (err, result) => {
       if (err) {
         reject(err);
       }

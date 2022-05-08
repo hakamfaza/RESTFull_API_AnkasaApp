@@ -11,6 +11,9 @@ const destinationController = {
         country: req.body.country,
         place: req.body.place,
         image: req.file.filename,
+        price: Number(req.body.price),
+        totalAirline: Number(req.body.totalAirline),
+        date: new Date(),
       };
       const destination = await destinationModels.createDestination(setData);
       success(res, {
@@ -27,8 +30,10 @@ const destinationController = {
     }
   },
   getDestination: async (req, res) => {
+    const limit = req.query.limit ? req.query.limit : 5;
+    const sortType = req.query.sortType ? req.query.sortType : 'DESC';
     try {
-      const destination = await destinationModels.getDestination();
+      const destination = await destinationModels.getDestination(sortType, limit);
       success(res, {
         code: 200,
         payload: destination.rows,
@@ -66,6 +71,9 @@ const destinationController = {
         country: req.body.country,
         place: req.body.place,
         image: req.file.filename,
+        price: Number(req.body.price),
+        totalAirline: Number(req.body.totalAirline),
+        date: new Date(),
       };
       const destination = await destinationModels.updateDestination(setData);
       success(res, {
