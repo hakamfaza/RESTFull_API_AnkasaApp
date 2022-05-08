@@ -4,7 +4,7 @@ const productModel = {
   getAllProduct: (transit, airline, minprice, maxprice, origin, destination, seatClass) => new Promise((resolve, reject) => {
     let sql = `SELECT products.origin, products.destination, products.price, products.seat_class,      products.stock,
                 products.transit_total, products.flight_date, products.airline_id, products.estimation,
-                products.created_date, products.code, products.gate, products.terminal, products.id, airlines.name
+                products.created_date, products.code, products.gate, products.terminal, products.id, airlines.name, airlines.photo
 				FROM products INNER JOIN airlines ON products.airline_id = airlines.id`;
 
     if (transit || airline || minprice || maxprice) {
@@ -76,7 +76,7 @@ const productModel = {
     });
   }),
   detailProduct: (id) => new Promise((resolve, reject) => {
-    db.query(`SELECT * FROM products WHERE id='${id}'`, (err, result) => {
+    db.query(`SELECT * FROM products INNER JOIN airlines ON products.airline_id = airlines.id WHERE id='${id}'`, (err, result) => {
       if (err) {
         reject(err);
       }
