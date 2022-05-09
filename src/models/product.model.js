@@ -32,7 +32,7 @@ const productModel = {
       sql += ` AND LOWER(products.seat_class)='${seatClass.toLowerCase()}'`;
     }
     if (stock) {
-      sql += ` AND products.stock=${stock}`;
+      sql += ` AND products.stock>=${stock}`;
     }
 
     db.query(sql, (err, result) => {
