@@ -51,6 +51,18 @@ module.exports = {
       },
     );
   }),
+  updatePhoto: (id, photo) => new Promise((resolve, reject) => {
+    db.query(
+      'UPDATE users SET photo=$1 WHERE id=$2',
+      [photo, id],
+      (error, result) => {
+        if (error) {
+          reject(error);
+        }
+        resolve(result);
+      },
+    );
+  }),
   removeById: (id) => new Promise((resolve, reject) => {
     db.query('DELETE FROM users WHERE id=$1', [id], (error, result) => {
       if (error) {
