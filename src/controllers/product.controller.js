@@ -7,7 +7,8 @@ const productController = {
   getListProduct: async (req, res) => {
     try {
       const {
-        transitFiltered, airlinesFiltered, minPriceFiltered, maxPriceFiltered, originFiltered, destinationFiltered, seatClassFiltered, page, limit, stockFiltered
+        transitFiltered, airlinesFiltered, minPriceFiltered, maxPriceFiltered, originFiltered,
+        destinationFiltered, seatClassFiltered, page, limit, stockFiltered
       } = req.query;
 
       const transit = transitFiltered || '';
@@ -22,7 +23,7 @@ const productController = {
       const count = await productModel.countAll();
       const paging = createPagination(count.rows[0].count, page, limit);
 
-      await productModel.getAllProduct(transit, airline, minprice, maxprice, origin, destination, seatClass)
+      await productModel.getAllProduct(transit, airline, minprice, maxprice, origin, destination, seatClass, stock)
         .then((result) => {
           success(res, {
             code: 200,
@@ -49,10 +50,6 @@ const productController = {
   createdProduct: async (req, res) => {
     try {
       const id = uuidv4();
-
-      // Jika sudah ada login maka airline_id diambil dari id admin yang sedang login
-
-      // const airline_id =
 
       const {
         origin, destination, price, seat_class, stock,

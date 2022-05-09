@@ -61,6 +61,38 @@ module.exports = {
       const user = await userModel.selectById(id);
       // jika user tidak ditemukan
       if (!user.rowCount) {
+        failed(res, {
+          code: 404,
+          payload: `User with Id ${id} not found`,
+          message: 'Update User Failed',
+        });
+        return;
+      }
+
+      // jika update user disertai photo
+      const { photo, email } = user.rows[0]; // email tidak boleh diubah
+      await userModel.updateById(id, { ...req.body, photo, email });
+
+      success(res, {
+        code: 200,
+        payload: null,
+        message: 'Update User Success',
+      });
+    } catch (error) {
+      failed(res, {
+        code: 500,
+        payload: error.message,
+        message: 'Internal Server Error',
+      });
+    }
+  },
+  updatePhoto: async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const user = await userModel.selectById(id);
+      // jika user tidak ditemukan
+      if (!user.rowCount) {
         // menghapus photo jika ada
         if (req.file) {
           deleteFile(req.file.path);
@@ -84,13 +116,12 @@ module.exports = {
         // mendapatkan name photo baru
         photo = req.file.filename;
       }
-      const { email } = user.rows[0]; // email tidak boleh diubah
-      await userModel.updateById(id, { ...req.body, photo, email });
+      await userModel.updatePhoto(id, photo);
 
       success(res, {
         code: 200,
         payload: null,
-        message: 'Update User Success',
+        message: 'Update User Photo Success',
       });
     } catch (error) {
       failed(res, {
