@@ -8,7 +8,7 @@ const productController = {
     try {
       const {
         transitFiltered, airlinesFiltered, minPriceFiltered, maxPriceFiltered, originFiltered,
-        destinationFiltered, seatClassFiltered, page, limit, stockFiltered
+        destinationFiltered, seatClassFiltered, page, limit, stockFiltered,
       } = req.query;
 
       const transit = transitFiltered || '';
@@ -23,7 +23,16 @@ const productController = {
       const count = await productModel.countAll();
       const paging = createPagination(count.rows[0].count, page, limit);
 
-      await productModel.getAllProduct(transit, airline, minprice, maxprice, origin, destination, seatClass, stock)
+      await productModel.getAllProduct(
+        transit,
+        airline,
+        minprice,
+        maxprice,
+        origin,
+        destination,
+        seatClass,
+        stock,
+      )
         .then((result) => {
           success(res, {
             code: 200,
@@ -54,8 +63,9 @@ const productController = {
       const {
         origin, destination, price, seat_class, stock,
         transit_total, flight_date, airline_id, estimation,
-        created_date, code, gate, terminal,
+        code, gate, terminal,
       } = req.body;
+      const created_date = new Date();
 
       await productModel.storeProduct(
         origin,
@@ -73,7 +83,7 @@ const productController = {
         terminal,
         id,
       )
-        .then((result) => {
+        .then(() => {
           success(res, {
             code: 200,
             payload: null,

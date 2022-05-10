@@ -1,11 +1,17 @@
 const db = require('../config/db');
 
 const productModel = {
-  getAllProduct: (transit, airline, minprice, maxprice, origin, destination, seatClass, stock) => new Promise((resolve, reject) => {
-    let sql = `SELECT products.origin, products.destination, products.price, products.seat_class,      products.stock,
-                products.transit_total, products.flight_date, products.airline_id, products.estimation,
-                products.created_date, products.code, products.gate, products.terminal, products.id, airlines.name, airlines.photo
-				FROM products INNER JOIN airlines ON products.airline_id = airlines.id`;
+  getAllProduct: (
+    transit,
+    airline,
+    minprice,
+    maxprice,
+    origin,
+    destination,
+    seatClass,
+    stock,
+  ) => new Promise((resolve, reject) => {
+    let sql = 'SELECT products.origin, products.destination, products.price, products.seat_class, products.stock, products.transit_total, products.flight_date, products.airline_id, products.estimation, products.created_date, products.code, products.gate, products.terminal, products.id, airlines.name, airlines.photo FROM products INNER JOIN airlines ON products.airline_id = airlines.id';
 
     if (transit || airline || minprice || maxprice) {
       sql += ' WHERE products.code LIKE \'%%\'';
@@ -64,14 +70,14 @@ const productModel = {
                 $10, $11, $12, $13, $14)`, [origin, destination, price, seat_class, stock,
       transit_total, flight_date, airline_id, estimation,
       created_date, code, gate, terminal, id], (err, result) => {
-        if (err) {
-          reject(err);
-        }
-        resolve(result);
-      });
+      if (err) {
+        reject(err);
+      }
+      resolve(result);
+    });
   }),
   countAll: () => new Promise((resolve, reject) => {
-    db.query(`SELECT COUNT(*) FROM products`, (err, result) => {
+    db.query('SELECT COUNT(*) FROM products', (err, result) => {
       if (err) {
         reject(err);
       }
@@ -107,11 +113,11 @@ const productModel = {
                 created_date=$10, code=$11, gate=$12, terminal=$13 WHERE id=$14`, [origin, destination, price, seat_class, stock,
       transit_total, flight_date, airline_id, estimation,
       created_date, code, gate, terminal, id], (err, result) => {
-        if (err) {
-          reject(err);
-        }
-        resolve(result);
-      });
+      if (err) {
+        reject(err);
+      }
+      resolve(result);
+    });
   }),
   deleteProduct: (id) => new Promise((resolve, reject) => {
     db.query(`DELETE FROM products WHERE id='${id}'`, (err, result) => {

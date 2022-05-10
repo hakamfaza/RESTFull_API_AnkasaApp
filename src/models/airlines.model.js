@@ -1,7 +1,7 @@
 const db = require('../config/db');
 
 const airlinesModel = {
-  allData: (search) => new Promise((resolve, reject) => {
+  allData: () => new Promise((resolve, reject) => {
     db.query('SELECT COUNT(*) AS total FROM airlines', (err, res) => {
       if (err) {
         reject(err);
@@ -43,7 +43,15 @@ const airlinesModel = {
       },
     );
   }),
-  updateAirlines: (id, photo, name, pic, phone, date, isActive) => new Promise((resolve, reject) => {
+  updateAirlines: (
+    id,
+    photo,
+    name,
+    pic,
+    phone,
+    date,
+    isActive,
+  ) => new Promise((resolve, reject) => {
     db.query(
       `UPDATE airlines SET photo='${photo}', name='${name}',pic='${pic}'
                 , phone='${phone}', created_date='${date}', is_active='${isActive}' WHERE id='${id}'`,
