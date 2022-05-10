@@ -84,7 +84,7 @@ const productController = {
         terminal,
       } = req.body;
       const created_date = new Date();
-      const code = crypto.randomBytes(5).toString('hex').toUpperCase();
+      const code = crypto.randomBytes(3).toString('hex').toUpperCase();
 
       await productModel
         .storeProduct(
