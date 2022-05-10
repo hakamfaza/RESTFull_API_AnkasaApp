@@ -15,7 +15,7 @@ const {
 module.exports = {
   register: async (req, res) => {
     try {
-      if (!req.body.email || !req.body.name || req.body.password) {
+      if (!req.body.email || !req.body.name || !req.body.password) {
         throw Error('parameter cannot blank');
       }
 

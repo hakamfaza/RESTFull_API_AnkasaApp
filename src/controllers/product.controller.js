@@ -8,7 +8,7 @@ const productController = {
     try {
       const {
         transitFiltered, airlinesFiltered, minPriceFiltered, maxPriceFiltered, originFiltered,
-        destinationFiltered, seatClassFiltered, page, limit, stockFiltered,
+        destinationFiltered, typeFiltered, page, limit, stockFiltered,
       } = req.query;
 
       const transit = transitFiltered || '';
@@ -17,7 +17,7 @@ const productController = {
       const maxprice = maxPriceFiltered || '';
       const origin = originFiltered || '';
       const destination = destinationFiltered || '';
-      const seatClass = seatClassFiltered || '';
+      const type = typeFiltered || '';
       const stock = stockFiltered || '';
 
       const count = await productModel.countAll();
@@ -30,7 +30,7 @@ const productController = {
         maxprice,
         origin,
         destination,
-        seatClass,
+        type,
         stock,
       )
         .then((result) => {
@@ -61,7 +61,7 @@ const productController = {
       const id = uuidv4();
 
       const {
-        origin, destination, price, seat_class, stock,
+        origin, destination, price, seat, stock,
         transit_total, flight_date, airline_id, estimation,
         code, gate, terminal,
       } = req.body;
@@ -71,7 +71,7 @@ const productController = {
         origin,
         destination,
         price,
-        seat_class,
+        seat,
         stock,
         transit_total,
         flight_date,

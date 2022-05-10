@@ -8,10 +8,10 @@ const productModel = {
     maxprice,
     origin,
     destination,
-    seatClass,
+    type,
     stock,
   ) => new Promise((resolve, reject) => {
-    let sql = 'SELECT products.origin, products.destination, products.price, products.seat_class, products.stock, products.transit_total, products.flight_date, products.airline_id, products.estimation, products.created_date, products.code, products.gate, products.terminal, products.id, airlines.name, airlines.photo FROM products INNER JOIN airlines ON products.airline_id = airlines.id';
+    let sql = 'SELECT products.origin, products.destination, products.price, products.type, products.seat, products.stock, products.transit_total, products.flight_date, products.airline_id, products.estimation, products.created_date, products.code, products.gate, products.terminal, products.id, airlines.name, airlines.photo FROM products INNER JOIN airlines ON products.airline_id = airlines.id';
 
     if (transit || airline || minprice || maxprice) {
       sql += ' WHERE products.code LIKE \'%%\'';
@@ -34,8 +34,8 @@ const productModel = {
     if (destination) {
       sql += ` AND LOWER(products.destination)='${destination.toLowerCase()}'`;
     }
-    if (seatClass) {
-      sql += ` AND LOWER(products.seat_class)='${seatClass.toLowerCase()}'`;
+    if (type) {
+      sql += ` AND LOWER(products.type)='${type.toLowerCase()}'`;
     }
     if (stock) {
       sql += ` AND products.stock>=${stock}`;
@@ -52,7 +52,7 @@ const productModel = {
     origin,
     destination,
     price,
-    seat_class,
+    seat,
     stock,
     transit_total,
     flight_date,
@@ -63,13 +63,14 @@ const productModel = {
     gate,
     terminal,
     id,
+    type,
   ) => new Promise((resolve, reject) => {
-    db.query(`INSERT INTO products (origin, destination, price, seat_class, stock,
+    db.query(`INSERT INTO products (origin, destination, price, seat, stock,
                 transit_total, flight_date, airline_id, estimation,
-                created_date, code, gate, terminal, id) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9,
-                $10, $11, $12, $13, $14)`, [origin, destination, price, seat_class, stock,
+                created_date, code, gate, terminal, id, type) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9,
+                $10, $11, $12, $13, $14)`, [origin, destination, price, seat, stock,
       transit_total, flight_date, airline_id, estimation,
-      created_date, code, gate, terminal, id], (err, result) => {
+      created_date, code, gate, terminal, id, type], (err, result) => {
       if (err) {
         reject(err);
       }
@@ -96,7 +97,7 @@ const productModel = {
     origin,
     destination,
     price,
-    seat_class,
+    seat,
     stock,
     transit_total,
     flight_date,
@@ -106,13 +107,14 @@ const productModel = {
     code,
     gate,
     terminal,
+    type,
     id,
   ) => new Promise((resolve, reject) => {
-    db.query(`UPDATE products SET origin=$1, destination=$2, price=$3, seat_class=$4, stock=$5,
+    db.query(`UPDATE products SET origin=$1, destination=$2, price=$3, seat=$4, stock=$5,
                 transit_total=$6, flight_date=$7, airline_id=$8, estimation=$9,
-                created_date=$10, code=$11, gate=$12, terminal=$13 WHERE id=$14`, [origin, destination, price, seat_class, stock,
+                created_date=$10, code=$11, gate=$12, terminal=$13, type=$14 WHERE id=$15`, [origin, destination, price, seat, stock,
       transit_total, flight_date, airline_id, estimation,
-      created_date, code, gate, terminal, id], (err, result) => {
+      created_date, code, gate, terminal, id, type], (err, result) => {
       if (err) {
         reject(err);
       }
