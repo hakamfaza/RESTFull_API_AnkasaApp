@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
+const crypto = require('crypto');
 const productModel = require('../models/product.model');
 const { success, failed } = require('../utils/createResponse');
 const createPagination = require('../utils/createPagination');
@@ -7,8 +8,16 @@ const productController = {
   getListProduct: async (req, res) => {
     try {
       const {
-        transitFiltered, airlinesFiltered, minPriceFiltered, maxPriceFiltered, originFiltered,
-        destinationFiltered, typeFiltered, page, limit, stockFiltered,
+        transitFiltered,
+        airlinesFiltered,
+        minPriceFiltered,
+        maxPriceFiltered,
+        originFiltered,
+        destinationFiltered,
+        typeFiltered,
+        page,
+        limit,
+        stockFiltered,
       } = req.query;
 
       const transit = transitFiltered || '';
@@ -23,16 +32,17 @@ const productController = {
       const count = await productModel.countAll();
       const paging = createPagination(count.rows[0].count, page, limit);
 
-      await productModel.getAllProduct(
-        transit,
-        airline,
-        minprice,
-        maxprice,
-        origin,
-        destination,
-        type,
-        stock,
-      )
+      await productModel
+        .getAllProduct(
+          transit,
+          airline,
+          minprice,
+          maxprice,
+          origin,
+          destination,
+          type,
+          stock,
+        )
         .then((result) => {
           success(res, {
             code: 200,
@@ -61,28 +71,42 @@ const productController = {
       const id = uuidv4();
 
       const {
-        origin, destination, price, seat, stock,
-        transit_total, flight_date, airline_id, estimation,
-        code, gate, terminal,
-      } = req.body;
-      const created_date = new Date();
-
-      await productModel.storeProduct(
         origin,
         destination,
         price,
-        seat,
         stock,
         transit_total,
         flight_date,
         airline_id,
         estimation,
-        created_date,
-        code,
+        type,
         gate,
         terminal,
-        id,
-      )
+      } = req.body;
+      const created_date = new Date();
+      const code = crypto
+        .randomBytes(50)
+        .toString('hex')
+        .trim(20, 26)
+        .toUpperCase();
+
+      await productModel
+        .storeProduct(
+          origin,
+          destination,
+          price,
+          type,
+          stock,
+          transit_total,
+          flight_date,
+          airline_id,
+          estimation,
+          created_date,
+          gate,
+          terminal,
+          id,
+          code,
+        )
         .then(() => {
           success(res, {
             code: 200,
@@ -92,11 +116,14 @@ const productController = {
           res.json(res, 'berhasil create');
         })
         .catch((err) => {
-          failed((res, {
-            code: 500,
-            payload: err.message,
-            message: 'failed to create product',
-          }));
+          failed(
+            (res,
+            {
+              code: 500,
+              payload: err.message,
+              message: 'failed to create product',
+            }),
+          );
           res.json(res, 'gagal create');
         });
     } catch (err) {
@@ -112,7 +139,8 @@ const productController = {
     try {
       const { id } = req.params;
 
-      await productModel.detailProduct(id)
+      await productModel
+        .detailProduct(id)
         .then((result) => {
           success(res, {
             code: 200,
@@ -140,12 +168,6 @@ const productController = {
       const productId = req.params.id;
 
       const {
-        origin, destination, price, seat_class, stock,
-        transit_total, flight_date, airline_id, estimation,
-        created_date, code, gate, terminal,
-      } = req.body;
-
-      await productModel.updateProduct(
         origin,
         destination,
         price,
@@ -159,8 +181,25 @@ const productController = {
         code,
         gate,
         terminal,
-        productId,
-      )
+      } = req.body;
+
+      await productModel
+        .updateProduct(
+          origin,
+          destination,
+          price,
+          seat_class,
+          stock,
+          transit_total,
+          flight_date,
+          airline_id,
+          estimation,
+          created_date,
+          code,
+          gate,
+          terminal,
+          productId,
+        )
         .then((result) => {
           success(res, {
             code: 200,
@@ -169,11 +208,14 @@ const productController = {
           });
         })
         .catch((err) => {
-          failed((res, {
-            code: 500,
-            payload: err.message,
-            message: 'failed to update product',
-          }));
+          failed(
+            (res,
+            {
+              code: 500,
+              payload: err.message,
+              message: 'failed to update product',
+            }),
+          );
         });
     } catch (err) {
       failed(res, {
@@ -188,7 +230,8 @@ const productController = {
     try {
       const { id } = req.params;
 
-      productModel.deleteProduct(id)
+      productModel
+        .deleteProduct(id)
         .then((result) => {
           success(res, {
             code: 200,
@@ -211,7 +254,6 @@ const productController = {
       });
     }
   },
-
 };
 
 module.exports = productController;
