@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
+const crypto = require('crypto');
 const transactionsModels = require('../models/transactions.models');
 const { success, failed } = require('../utils/createResponse');
 
@@ -7,10 +8,16 @@ const transactionsController = {
     try {
       const id = uuidv4();
 
+      const seat = [];
+      for (let i = 0; i <= req.body.totalOrder; i++) {
+        seat.push(crypto.randomBytes(5).toString('hex').toUpperCase());
+      }
+
       const setData = {
         product_id: req.params.id,
-        is_paid: req.body.isPaid ? true : req.body.isPaid,
-        seat: req.body.seat,
+        is_paid: false,
+        totalOrder: req.body.totalOrder,
+        seat: seat.join(', '),
         user_id: req.APP_DATA.tokenDecoded.id,
         id,
       };
@@ -63,43 +70,14 @@ const transactionsController = {
       });
     }
   },
-  updateTransaction: async (req, res) => {
-    try {
-      const setData = {
-        product_id: req.body.productId,
-        is_paid: req.body.isPaid,
-        seat: req.body.seat,
-        user_id: req.APP_DATA.tokenDecoded.id,
-        id: req.params.id,
-      };
-
-      const transactions = await transactionsModels.updateTransaction(setData);
-      if (transactions.rowCount > 0) {
-        success(res, {
-          code: 200,
-          payload: transactions,
-          message: 'update transaction success!',
-        });
-      } else {
-        failed(res, {
-          code: 500,
-          payload: null,
-          message: 'failed to update!',
-        });
-      }
-    } catch (error) {
-      failed(res, {
-        code: 500,
-        payload: error.message,
-        message: 'internal server error!',
-      });
-    }
-  },
   deleteTransactions: async (req, res) => {
     try {
       const { id } = req.params;
       const { userId } = req.body;
-      const transactions = await transactionsModels.deleteTransactions(id, userId);
+      const transactions = await transactionsModels.deleteTransactions(
+        id,
+        userId,
+      );
       if (transactions.rowCount) {
         success(res, {
           code: 200,
@@ -110,7 +88,7 @@ const transactionsController = {
         failed(res, {
           code: 500,
           payload: null,
-          message: 'you can\'t delete this!',
+          message: "you can't delete this!",
         });
       }
     } catch (error) {
@@ -125,11 +103,30 @@ const transactionsController = {
     try {
       // const { userId } = req.body;
       const userId = req.APP_DATA.tokenDecoded.id;
-      const transactions = await transactionsModels.getTransactionByUser(userId);
+      const transactions = await transactionsModels.getTransactionByUser(
+        userId,
+      );
       success(res, {
         code: 200,
         payload: transactions.rows,
         message: 'success get transactions by user!',
+      });
+    } catch (error) {
+      failed(res, {
+        code: 500,
+        payload: error.message,
+        message: 'internal server error!',
+      });
+    }
+  },
+  confirmPaid: async (req, res) => {
+    try {
+      await transactionsModels.paid(req.params.id);
+
+      success(res, {
+        code: 200,
+        payload: null,
+        message: 'success paid!',
       });
     } catch (error) {
       failed(res, {

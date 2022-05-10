@@ -3,9 +3,9 @@ const {
   getTransactions,
   createTransactions,
   getDetailTransactions,
-  updateTransaction,
   deleteTransactions,
   getTransactionsByUser,
+  confirmPaid,
 } = require('../controllers/transactions.controller');
 const jwtAuth = require('../middlewares/jwtAuth');
 
@@ -15,8 +15,8 @@ router
   .post('/transactions/:id', jwtAuth, createTransactions)
   .get('/transactions', jwtAuth, getTransactions)
   .get('/transactions/:id', jwtAuth, getDetailTransactions)
-  .put('/transactions/:id', jwtAuth, updateTransaction)
   .delete('/transactions/:id', jwtAuth, deleteTransactions)
-  .get('/userTransactions', jwtAuth, getTransactionsByUser);
+  .get('/userTransactions', jwtAuth, getTransactionsByUser)
+  .put('/transactions/:id/paid', jwtAuth, confirmPaid);
 
 module.exports = router;
