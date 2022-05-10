@@ -34,7 +34,7 @@ const transactionsModels = {
     );
   }),
   getTransactions: () => new Promise((resolve, reject) => {
-    db.query('SELECT * FROM transactions inner join products ON transactions.product_id = products.id inner join airlines on transactions.airline_id = airlines.id;', (err, result) => {
+    db.query('SELECT * FROM transactions inner join products ON transactions.product_id = products.id inner join airlines on transactions.airline_id = airlines.id', (err, result) => {
       if (err) {
         reject(err);
       }
@@ -67,7 +67,7 @@ const transactionsModels = {
   }),
   getTransactionByUser: (userId) => new Promise((resolve, reject) => {
     db.query(
-      'SELECT * FROM transactions WHERE user_id=$1',
+      'SELECT products.flight_date, products.origin, products.destination, airlines.name, transactions.seat, transactions.is_paid, transactions.id FROM transactions inner join products ON transactions.product_id = products.id inner join airlines on transactions.airline_id = airlines.id WHERE user_id=$1',
       [userId],
       (err, result) => {
         if (err) {

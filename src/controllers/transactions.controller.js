@@ -1,6 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
 const crypto = require('crypto');
 const transactionsModels = require('../models/transactions.models');
+const productModel = require('../models/product.model')
 const { success, failed } = require('../utils/createResponse');
 
 const transactionsController = {
@@ -123,6 +124,15 @@ const transactionsController = {
   confirmPaid: async (req, res) => {
     try {
       await transactionsModels.paid(req.params.id);
+
+      const data = await transactionsModels.getDetailTransactions(req.params.id)
+
+      const data2 = await productModel.detailProduct(data.rows[0].product_id)
+
+      // console.log(data2)
+      const minStock = data2.rows[0].stock - data.rows[0].total_order
+
+      await productModel.reduceStock(minStock)
 
       success(res, {
         code: 200,
