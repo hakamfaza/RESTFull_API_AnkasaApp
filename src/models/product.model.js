@@ -52,22 +52,22 @@ const productModel = {
     origin,
     destination,
     price,
+    type,
     stock,
     transit_total,
     flight_date,
     airline_id,
     estimation,
     created_date,
-    code,
     gate,
     terminal,
     id,
-    type,
+    code,
   ) => new Promise((resolve, reject) => {
     db.query(`INSERT INTO products (origin, destination, price, stock,
                 transit_total, flight_date, airline_id, estimation,
                 created_date, code, gate, terminal, id, type) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9,
-                $10, $11, $12, $13)`, [origin, destination, price, stock,
+                $10, $11, $12, $13, $14)`, [origin, destination, price, stock,
       transit_total, flight_date, airline_id, estimation,
       created_date, code, gate, terminal, id, type], (err, result) => {
       if (err) {
@@ -96,23 +96,21 @@ const productModel = {
     origin,
     destination,
     price,
+    type,
     stock,
     transit_total,
     flight_date,
     airline_id,
     estimation,
-    created_date,
-    code,
     gate,
     terminal,
-    type,
     id,
   ) => new Promise((resolve, reject) => {
     db.query(`UPDATE products SET origin=$1, destination=$2, price=$3, type=$4, stock=$5,
                 transit_total=$6, flight_date=$7, airline_id=$8, estimation=$9,
-                created_date=$10, code=$11, gate=$12, terminal=$13, WHERE id=$14`, [origin, destination, price, type, stock,
+                gate=$10, terminal=$11 WHERE id=$12`, [origin, destination, price, type, stock,
       transit_total, flight_date, airline_id, estimation,
-      created_date, code, gate, terminal, id, type], (err, result) => {
+      gate, terminal, id], (err, result) => {
       if (err) {
         reject(err);
       }

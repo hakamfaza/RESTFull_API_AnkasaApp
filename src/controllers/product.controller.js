@@ -84,11 +84,7 @@ const productController = {
         terminal,
       } = req.body;
       const created_date = new Date();
-      const code = crypto
-        .randomBytes(50)
-        .toString('hex')
-        .trim(20, 26)
-        .toUpperCase();
+      const code = crypto.randomBytes(5).toString('hex').toUpperCase();
 
       await productModel
         .storeProduct(
@@ -113,7 +109,6 @@ const productController = {
             payload: null,
             message: 'create product success',
           });
-          res.json(res, 'berhasil create');
         })
         .catch((err) => {
           failed(
@@ -124,7 +119,6 @@ const productController = {
               message: 'failed to create product',
             }),
           );
-          res.json(res, 'gagal create');
         });
     } catch (err) {
       failed(res, {
@@ -132,7 +126,6 @@ const productController = {
         payload: err.message,
         message: 'Internal server error',
       });
-      res.json(err, 'internal server');
     }
   },
   getDetailProduct: async (req, res) => {
@@ -171,14 +164,12 @@ const productController = {
         origin,
         destination,
         price,
-        seat_class,
         stock,
         transit_total,
         flight_date,
         airline_id,
         estimation,
-        created_date,
-        code,
+        type,
         gate,
         terminal,
       } = req.body;
@@ -188,14 +179,12 @@ const productController = {
           origin,
           destination,
           price,
-          seat_class,
+          type,
           stock,
           transit_total,
           flight_date,
           airline_id,
           estimation,
-          created_date,
-          code,
           gate,
           terminal,
           productId,
@@ -223,7 +212,6 @@ const productController = {
         payload: err.message,
         message: 'Internal server error',
       });
-      res.json(err, 'internal server');
     }
   },
   deleteProduct: async (req, res) => {
