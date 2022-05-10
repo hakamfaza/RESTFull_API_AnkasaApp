@@ -8,7 +8,7 @@ const jwtAuth = require('../middlewares/jwtAuth');
 const route = express.Router();
 
 route
-  .get('/product', jwtAuth, getListProduct) // solved
+  .get('/product', getListProduct) // solved
   .post('/product', jwtAuth, createdProduct) // solved
   .get('/product-detail/:id', jwtAuth, getDetailProduct) // solved
   .put('/product/:id', jwtAuth, updateProduct) // solved
