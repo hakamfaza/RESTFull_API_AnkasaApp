@@ -75,7 +75,8 @@ const transactionsController = {
   deleteTransactions: async (req, res) => {
     try {
       const { id } = req.params;
-      const { userId } = req.body;
+      const userId = req.APP_DATA.tokenDecoded.id
+      // const { userId } = req.body;
       const transactions = await transactionsModels.deleteTransactions(
         id,
         userId,
