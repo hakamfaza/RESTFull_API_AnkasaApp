@@ -3,9 +3,10 @@ const db = require('../config/db');
 const transactionsModels = {
   createTransaction: (setData) => new Promise((resolve, rejectt) => {
     db.query(
-      'INSERT INTO transactions (product_id, is_paid, user_id, seat, total_order, id) VALUES ($1, $2, $3, $4, $5, $6)',
+      'INSERT INTO transactions (product_id, airline_id, is_paid, user_id, seat, total_order, id) VALUES ($1, $2, $3, $4, $5, $6, $7)',
       [
         setData.product_id,
+        setData.airline_id,
         setData.is_paid,
         setData.user_id,
         setData.seat,
@@ -33,7 +34,7 @@ const transactionsModels = {
     );
   }),
   getTransactions: () => new Promise((resolve, reject) => {
-    db.query('SELECT * FROM transactions', (err, result) => {
+    db.query('SELECT * FROM transactions inner join products ON transactions.product_id = products.id inner join airlines on transactions.airline_id = airlines.id;', (err, result) => {
       if (err) {
         reject(err);
       }
