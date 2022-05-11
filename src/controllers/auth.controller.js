@@ -15,10 +15,6 @@ const {
 module.exports = {
   register: async (req, res) => {
     try {
-      if (!req.body.email || !req.body.name || !req.body.password) {
-        throw Error('parameter cannot blank');
-      }
-
       const user = await userModel.selectByEmail(req.body.email);
       if (user.rowCount) {
         failed(res, {

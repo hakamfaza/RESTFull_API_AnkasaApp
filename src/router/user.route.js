@@ -7,6 +7,7 @@ const {
   updatePhoto,
 } = require('../controllers/user.controller');
 const upload = require('../middlewares/upload');
+const userValidation = require('../validations/user.validation');
 const jwtAuth = require('../middlewares/jwtAuth');
 
 const router = express.Router();
@@ -14,8 +15,8 @@ const router = express.Router();
 router
   .get('/user', jwtAuth, list)
   .get('/user/:id', jwtAuth, detail)
-  .put('/user/:id', jwtAuth, update)
+  .put('/user/:id', userValidation.update, jwtAuth, update)
   .put('/user/:id/photo', jwtAuth, upload, updatePhoto)
-  .delete('/user/:id', jwtAuth, upload, remove);
+  .delete('/user/:id', jwtAuth, remove);
 
 module.exports = router;

@@ -70,11 +70,11 @@ const productModel = {
                 $10, $11, $12, $13, $14)`, [origin, destination, price, stock,
       transit_total, flight_date, airline_id, estimation,
       created_date, code, gate, terminal, id, type], (err, result) => {
-        if (err) {
-          reject(err);
-        }
-        resolve(result);
-      });
+      if (err) {
+        reject(err);
+      }
+      resolve(result);
+    });
   }),
   countAll: () => new Promise((resolve, reject) => {
     db.query('SELECT COUNT(*) FROM products', (err, result) => {
@@ -111,11 +111,11 @@ const productModel = {
                 gate=$10, terminal=$11 WHERE id=$12`, [origin, destination, price, type, stock,
       transit_total, flight_date, airline_id, estimation,
       gate, terminal, id], (err, result) => {
-        if (err) {
-          reject(err);
-        }
-        resolve(result);
-      });
+      if (err) {
+        reject(err);
+      }
+      resolve(result);
+    });
   }),
 
   deleteProduct: (id) => new Promise((resolve, reject) => {

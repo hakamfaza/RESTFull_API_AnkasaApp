@@ -56,16 +56,6 @@ module.exports = {
   },
   update: async (req, res) => {
     try {
-      if (
-        !req.body.name
-        || !req.body.phone
-        || !req.body.city
-        || !req.body.address
-        || !req.body.postalCode
-      ) {
-        throw Error('parameter cannot blank');
-      }
-
       const { id } = req.params;
 
       const user = await userModel.selectById(id);

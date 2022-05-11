@@ -54,7 +54,7 @@ const airlinesModel = {
   ) => new Promise((resolve, reject) => {
     db.query(
       `UPDATE airlines SET photo='${photo}', name='${name}',pic='${pic}'
-                , phone='${phone}', created_date='${date}', is_active='${isActive}' WHERE id='${id}'`,
+                , phone='${phone}', is_active='${isActive}' WHERE id='${id}'`,
       (err, res) => {
         if (err) {
           reject(err);

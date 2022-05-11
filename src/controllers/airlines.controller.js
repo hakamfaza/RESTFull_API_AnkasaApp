@@ -90,18 +90,16 @@ const airlinesController = {
       const id = uuidv4();
       const file = req.file.filename;
       const {
-        name, pic, phone, date,
+        name, pic, phone,
       } = body;
-      if (!file || !name || !pic || !date || !phone) {
-        throw Error('parameter cannot blank');
-      }
+
       const data = {
         id,
         file,
         name,
         pic,
         phone,
-        date,
+        date: new Date(),
         isActive: true,
       };
       airlinesModel
@@ -136,10 +134,10 @@ const airlinesController = {
       const { id } = req.params;
       const photo = req.file.filename;
       const {
-        name, pic, phone, date, isActive,
+        name, pic, phone, isActive,
       } = req.body;
       airlinesModel
-        .updateAirlines(id, photo, name, pic, phone, date, isActive)
+        .updateAirlines(id, photo, name, pic, phone, isActive)
         .then((result) => {
           const data = {
             code: 404,
