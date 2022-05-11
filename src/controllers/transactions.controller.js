@@ -1,7 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
 const crypto = require('crypto');
 const transactionsModels = require('../models/transactions.models');
-const productModel = require('../models/product.model')
+const productModel = require('../models/product.model');
 const { success, failed } = require('../utils/createResponse');
 
 const transactionsController = {
@@ -22,6 +22,8 @@ const transactionsController = {
         seat: seat.join(', '),
         user_id: req.APP_DATA.tokenDecoded.id,
         id,
+        passenger_name: req.body.passenger_name,
+        passenger_phone: req.body.passenger_phone,
       };
 
       const transactions = await transactionsModels.createTransaction(setData);
@@ -75,7 +77,7 @@ const transactionsController = {
   deleteTransactions: async (req, res) => {
     try {
       const { id } = req.params;
-      const userId = req.APP_DATA.tokenDecoded.id
+      const userId = req.APP_DATA.tokenDecoded.id;
       // const { userId } = req.body;
       const transactions = await transactionsModels.deleteTransactions(
         id,
@@ -126,14 +128,14 @@ const transactionsController = {
     try {
       await transactionsModels.paid(req.params.id);
 
-      const data = await transactionsModels.getDetailTransactions(req.params.id)
+      const data = await transactionsModels.getDetailTransactions(req.params.id);
 
-      const data2 = await productModel.detailProduct(data.rows[0].product_id)
+      const data2 = await productModel.detailProduct(data.rows[0].product_id);
 
       // console.log(data2)
-      const minStock = data2.rows[0].stock - data.rows[0].total_order
+      const minStock = data2.rows[0].stock - data.rows[0].total_order;
 
-      await productModel.reduceStock(minStock)
+      await productModel.reduceStock(minStock);
 
       success(res, {
         code: 200,

@@ -3,7 +3,7 @@ const db = require('../config/db');
 const transactionsModels = {
   createTransaction: (setData) => new Promise((resolve, rejectt) => {
     db.query(
-      'INSERT INTO transactions (product_id, airline_id, is_paid, user_id, seat, total_order, id) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+      'INSERT INTO transactions (product_id, airline_id, is_paid, user_id, seat, total_order, id, passenger_name, passenger_phone) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)',
       [
         setData.product_id,
         setData.airline_id,
@@ -12,6 +12,8 @@ const transactionsModels = {
         setData.seat,
         setData.totalOrder,
         setData.id,
+        setData.passenger_name,
+        setData.passenger_phone,
       ],
       (err, result) => {
         if (err) {
