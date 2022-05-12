@@ -18,6 +18,7 @@ const productController = {
         page,
         limit,
         stockFiltered,
+        sortFiltered,
       } = req.query;
 
       const transit = transitFiltered || '';
@@ -28,6 +29,7 @@ const productController = {
       const destination = destinationFiltered || '';
       const type = typeFiltered || '';
       const stock = stockFiltered || '';
+      const orderBy = sortFiltered || 'created_date';
 
       const count = await productModel.countAll();
       const paging = createPagination(count.rows[0].count, page, limit);
@@ -42,6 +44,8 @@ const productController = {
           destination,
           type,
           stock,
+          orderBy,
+          paging,
         )
         .then((result) => {
           success(res, {

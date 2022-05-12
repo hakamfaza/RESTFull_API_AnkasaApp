@@ -10,11 +10,13 @@ const productModel = {
     destination,
     type,
     stock,
+    orderBy,
+    paging,
   ) => new Promise((resolve, reject) => {
     let sql = 'SELECT products.origin, products.destination, products.price, products.type, products.stock, products.transit_total, products.flight_date, products.airline_id, products.estimation, products.created_date, products.code, products.gate, products.terminal, products.id, airlines.name, airlines.photo FROM products INNER JOIN airlines ON products.airline_id = airlines.id';
 
     if (transit || airline || minprice || maxprice) {
-      sql += ' WHERE products.code LIKE \'%%\'';
+      sql += " WHERE products.code LIKE '%%'";
     }
     if (transit) {
       sql += ` AND products.transit_total = ${transit}`;
@@ -41,6 +43,23 @@ const productModel = {
       sql += ` AND products.stock>=${stock}`;
     }
 
+    if (orderBy.trim() === 'price') {
+      sql += 'ORDER BY products.price ';
+    } else if (orderBy.trim() === 'origin') {
+      sql += 'ORDER BY products.origin ';
+    } else if (orderBy.trim() === 'transit') {
+      sql += 'ORDER BY products.transit_total ';
+    } else if (orderBy.trim() === 'destination') {
+      sql += 'ORDER BY products.destination ';
+    } else if (orderBy.trim() === 'type') {
+      sql += 'ORDER BY products.type ';
+    } else if (orderBy.trim() === 'stock') {
+      sql += 'ORDER BY products.stock ';
+    } else {
+      sql += 'ORDER BY airlines.name ';
+    }
+    sql += `LIMIT ${paging.limit} OFFSET ${paging.offset}`;
+
     db.query(sql, (err, result) => {
       if (err) {
         reject(err);
@@ -64,17 +83,34 @@ const productModel = {
     id,
     code,
   ) => new Promise((resolve, reject) => {
-    db.query(`INSERT INTO products (origin, destination, price, stock,
+    db.query(
+      `INSERT INTO products (origin, destination, price, stock,
                 transit_total, flight_date, airline_id, estimation,
                 created_date, code, gate, terminal, id, type) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9,
-                $10, $11, $12, $13, $14)`, [origin, destination, price, stock,
-      transit_total, flight_date, airline_id, estimation,
-      created_date, code, gate, terminal, id, type], (err, result) => {
-      if (err) {
-        reject(err);
-      }
-      resolve(result);
-    });
+                $10, $11, $12, $13, $14)`,
+      [
+        origin,
+        destination,
+        price,
+        stock,
+        transit_total,
+        flight_date,
+        airline_id,
+        estimation,
+        created_date,
+        code,
+        gate,
+        terminal,
+        id,
+        type,
+      ],
+      (err, result) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(result);
+      },
+    );
   }),
   countAll: () => new Promise((resolve, reject) => {
     db.query('SELECT COUNT(*) FROM products', (err, result) => {
@@ -85,12 +121,15 @@ const productModel = {
     });
   }),
   detailProduct: (id) => new Promise((resolve, reject) => {
-    db.query(`SELECT * FROM products INNER JOIN airlines ON products.airline_id = airlines.id WHERE products.id='${id}'`, (err, result) => {
-      if (err) {
-        reject(err);
-      }
-      resolve(result);
-    });
+    db.query(
+      `SELECT * FROM products INNER JOIN airlines ON products.airline_id = airlines.id WHERE products.id='${id}'`,
+      (err, result) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(result);
+      },
+    );
   }),
   updateProduct: (
     origin,
@@ -106,16 +145,31 @@ const productModel = {
     terminal,
     id,
   ) => new Promise((resolve, reject) => {
-    db.query(`UPDATE products SET origin=$1, destination=$2, price=$3, type=$4, stock=$5,
+    db.query(
+      `UPDATE products SET origin=$1, destination=$2, price=$3, type=$4, stock=$5,
                 transit_total=$6, flight_date=$7, airline_id=$8, estimation=$9,
-                gate=$10, terminal=$11 WHERE id=$12`, [origin, destination, price, type, stock,
-      transit_total, flight_date, airline_id, estimation,
-      gate, terminal, id], (err, result) => {
-      if (err) {
-        reject(err);
-      }
-      resolve(result);
-    });
+                gate=$10, terminal=$11 WHERE id=$12`,
+      [
+        origin,
+        destination,
+        price,
+        type,
+        stock,
+        transit_total,
+        flight_date,
+        airline_id,
+        estimation,
+        gate,
+        terminal,
+        id,
+      ],
+      (err, result) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(result);
+      },
+    );
   }),
 
   deleteProduct: (id) => new Promise((resolve, reject) => {
