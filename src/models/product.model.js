@@ -182,8 +182,8 @@ const productModel = {
       resolve(result);
     });
   }),
-  reduceStock: (stock) => new Promise((resolve, reject) => {
-    db.query(`UPDATE products SET stock = ${stock}`, (err, result) => {
+  reduceStock: (id, stock) => new Promise((resolve, reject) => {
+    db.query(`UPDATE products SET stock = ${stock} WHERE id=${id}`, (err, result) => {
       if (err) {
         reject(err);
       }

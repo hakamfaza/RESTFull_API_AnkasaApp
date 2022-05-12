@@ -128,14 +128,11 @@ const transactionsController = {
     try {
       await transactionsModels.paid(req.params.id);
 
-      const data = await transactionsModels.getDetailTransactions(req.params.id);
+      const transactionData = await transactionsModels.getDetailTransactions(req.params.id);
+      const productData = await productModel.detailProduct(transactionData.rows[0].product_id);
+      const minStock = productData.rows[0].stock - transactionData.rows[0].total_order;
 
-      const data2 = await productModel.detailProduct(data.rows[0].product_id);
-
-      // console.log(data2)
-      const minStock = data2.rows[0].stock - data.rows[0].total_order;
-
-      await productModel.reduceStock(minStock);
+      await productModel.reduceStock(productData.rows[0].id, minStock);
 
       success(res, {
         code: 200,
