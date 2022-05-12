@@ -14,7 +14,7 @@ const jwtAuth = require('../middlewares/jwtAuth');
 const upload = require('../middlewares/upload');
 
 router
-  .get('/airlines', jwtAuth, list)
+  .get('/airlines', list)
   .get('/airlines/:id', jwtAuth, detail)
   .post('/airlines', jwtAuth, airlineValidation.post, upload, input)
   .put('/airlines/:id', jwtAuth, airlineValidation.post, upload, update)
