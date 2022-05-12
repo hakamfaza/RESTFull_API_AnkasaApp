@@ -55,8 +55,10 @@ const productModel = {
       sql += ' ORDER BY products.type ';
     } else if (orderBy.trim() === 'stock') {
       sql += ' ORDER BY products.stock';
-    } else {
+    } else if (orderBy.trim() === 'airline') {
       sql += ' ORDER BY airlines.name';
+    } else {
+      sql += ' ORDER BY products.created_date';
     }
     sql += ` LIMIT ${paging.limit} OFFSET ${paging.offset}`;
 
