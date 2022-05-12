@@ -44,21 +44,21 @@ const productModel = {
     }
 
     if (orderBy.trim() === 'price') {
-      sql += 'ORDER BY products.price ';
+      sql += ' ORDER BY products.price';
     } else if (orderBy.trim() === 'origin') {
-      sql += 'ORDER BY products.origin ';
+      sql += ' ORDER BY products.origin';
     } else if (orderBy.trim() === 'transit') {
-      sql += 'ORDER BY products.transit_total ';
+      sql += ' ORDER BY products.transit_total';
     } else if (orderBy.trim() === 'destination') {
-      sql += 'ORDER BY products.destination ';
+      sql += ' ORDER BY products.destination';
     } else if (orderBy.trim() === 'type') {
-      sql += 'ORDER BY products.type ';
+      sql += ' ORDER BY products.type ';
     } else if (orderBy.trim() === 'stock') {
-      sql += 'ORDER BY products.stock ';
+      sql += ' ORDER BY products.stock';
     } else {
-      sql += 'ORDER BY airlines.name ';
+      sql += ' ORDER BY airlines.name';
     }
-    sql += `LIMIT ${paging.limit} OFFSET ${paging.offset}`;
+    sql += ` LIMIT ${paging.limit} OFFSET ${paging.offset}`;
 
     db.query(sql, (err, result) => {
       if (err) {
