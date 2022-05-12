@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-module.exports = (count, page = 1, limit = 10) => {
+module.exports = (count, page = 1, limit = 5) => {
   let offset = 0;
 
   // jika page falsy
@@ -13,7 +13,7 @@ module.exports = (count, page = 1, limit = 10) => {
 
   // jika limit falsy
   if (!limit || limit < 1 || !/[\d]/.test(limit)) {
-    limit = 10;
+    limit = 5;
   }
   if (typeof limit === 'string') {
     limit = parseInt(limit, 10);
