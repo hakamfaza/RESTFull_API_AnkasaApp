@@ -17,7 +17,7 @@ const transactionsController = {
       const setData = {
         product_id: req.params.id,
         airline_id: req.body.airline_id,
-        is_paid: false,
+        is_paid: req.body.is_paid || false,
         totalOrder: req.body.totalOrder,
         seat: seat.join(', '),
         user_id: req.APP_DATA.tokenDecoded.id,
