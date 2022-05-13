@@ -140,7 +140,7 @@ const airlinesController = {
         .updateAirlines(id, photo, name, pic, phone, isActive)
         .then((result) => {
           const data = {
-            code: 404,
+            code: 200,
             payload: result,
             message: 'success to update airlines',
           };
@@ -201,7 +201,7 @@ const airlinesController = {
         .airlinesControl(id, isActive)
         .then((result) => {
           const data = {
-            code: 404,
+            code: 200,
             payload: result.command,
             message: 'managed to change the activeness of the airline',
           };
