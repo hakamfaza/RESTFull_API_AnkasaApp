@@ -196,13 +196,13 @@ const airlinesController = {
   control: async (req, res) => {
     try {
       const { id } = req.params;
-      const isActive = req.body;
+      const { isActive } = req.body;
       airlinesModel
         .airlinesControl(id, isActive)
         .then((result) => {
           const data = {
             code: 404,
-            payload: result,
+            payload: result.command,
             message: 'managed to change the activeness of the airline',
           };
           success(res, data);

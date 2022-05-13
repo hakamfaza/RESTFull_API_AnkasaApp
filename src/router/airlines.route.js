@@ -21,6 +21,6 @@ router
   .delete('/airlines/:id', jwtAuth, deleted)
 
   // suspend
-  .put('/airlines-control', jwtAuth, control);
+  .put('/airlines-control/:id', jwtAuth, control);
 
 module.exports = router;
