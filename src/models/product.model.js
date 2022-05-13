@@ -124,7 +124,7 @@ const productModel = {
   }),
   detailProduct: (id) => new Promise((resolve, reject) => {
     db.query(
-      `SELECT * FROM products INNER JOIN airlines ON products.airline_id = airlines.id WHERE products.id='${id}'`,
+      `SELECT products.id, products.airline_id, products.origin, products.destination, products.price, products.stock, products.transit_total, products.flight_date, products.estimation, products.created_date, products.code, products.date, products.terminal, products.type, airlines.name, airlines.pic, airlines.phone FROM products INNER JOIN airlines ON products.airline_id = airlines.id WHERE products.id='${id}'`,
       (err, result) => {
         if (err) {
           reject(err);
@@ -183,12 +183,15 @@ const productModel = {
     });
   }),
   reduceStock: (id, stock) => new Promise((resolve, reject) => {
-    db.query(`UPDATE products SET stock = ${stock} WHERE id=${id}`, (err, result) => {
-      if (err) {
-        reject(err);
-      }
-      resolve(result);
-    });
+    db.query(
+      `UPDATE products SET stock = ${stock} WHERE id=${id}`,
+      (err, result) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(result);
+      },
+    );
   }),
 };
 
