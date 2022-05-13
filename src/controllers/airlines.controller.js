@@ -134,10 +134,10 @@ const airlinesController = {
       const { id } = req.params;
       const photo = req.file.filename;
       const {
-        name, pic, phone, isActive,
+        name, pic, phone,
       } = req.body;
       airlinesModel
-        .updateAirlines(id, photo, name, pic, phone, isActive)
+        .updateAirlines(id, photo, name, pic, phone)
         .then((result) => {
           const data = {
             code: 200,
