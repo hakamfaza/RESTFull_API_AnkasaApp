@@ -27,6 +27,13 @@ const transactionsController = {
       };
 
       const transactions = await transactionsModels.createTransaction(setData);
+
+      if (setData.is_paid) {
+        const productData = await productModel.detailProduct(req.params.id);
+        const minStock = productData.rows[0].stock - parseInt(req.body.totalOrder, 10);
+        await productModel.reduceStock(productData.rows[0].id, minStock);
+      }
+
       success(res, {
         code: 200,
         payload: transactions,
@@ -128,8 +135,12 @@ const transactionsController = {
     try {
       await transactionsModels.paid(req.params.id);
 
-      const transactionData = await transactionsModels.getDetailTransactions(req.params.id);
-      const productData = await productModel.detailProduct(transactionData.rows[0].product_id);
+      const transactionData = await transactionsModels.getDetailTransactions(
+        req.params.id,
+      );
+      const productData = await productModel.detailProduct(
+        transactionData.rows[0].product_id,
+      );
       const minStock = productData.rows[0].stock - transactionData.rows[0].total_order;
 
       await productModel.reduceStock(productData.rows[0].id, minStock);
