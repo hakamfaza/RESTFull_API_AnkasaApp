@@ -8,6 +8,7 @@ const {
   control,
 } = require('../controllers/airlines.controller');
 const airlineValidation = require('../validations/airline.validation');
+const runValidation = require('../middlewares/runValidation');
 
 const router = express.Router();
 const jwtAuth = require('../middlewares/jwtAuth');
@@ -16,8 +17,22 @@ const upload = require('../middlewares/upload');
 router
   .get('/airlines', list)
   .get('/airlines/:id', jwtAuth, detail)
-  .post('/airlines', jwtAuth, airlineValidation.post, upload, input)
-  .put('/airlines/:id', jwtAuth, airlineValidation.post, upload, update)
+  .post(
+    '/airlines',
+    jwtAuth,
+    upload,
+    airlineValidation.post,
+    runValidation,
+    input,
+  )
+  .put(
+    '/airlines/:id',
+    jwtAuth,
+    upload,
+    airlineValidation.post,
+    runValidation,
+    update,
+  )
   .delete('/airlines/:id', jwtAuth, deleted)
 
   // suspend
