@@ -21,6 +21,8 @@ const post = [
   check('gate', 'Gate required').not().isEmpty(),
   // terminal
   check('terminal', 'Terminal required').not().isEmpty(),
+// terminal
+  check('airline_id', 'Airline required').not().isEmpty(),
 ];
 
 module.exports = {
