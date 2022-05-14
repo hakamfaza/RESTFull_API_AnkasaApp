@@ -31,7 +31,7 @@ const transactionsController = {
       if (setData.is_paid) {
         const productData = await productModel.detailProduct(req.params.id);
         const minStock = productData.rows[0].stock - parseInt(req.body.totalOrder, 10);
-        await productModel.reduceStock(productData.rows[0].id, minStock);
+        await productModel.reduceStock(req.params.id, minStock);
       }
 
       success(res, {
