@@ -170,7 +170,7 @@ const airlinesController = {
         .deleteAirlines(id)
         .then((result) => {
           const data = {
-            code: 404,
+            code: 200,
             payload: result,
             message: 'success to delete airlines',
           };
@@ -178,7 +178,7 @@ const airlinesController = {
         })
         .catch((err) => {
           const data = {
-            code: 404,
+            code: 500,
             payload: err,
             message: 'failed to delete airlines',
           };
@@ -186,7 +186,7 @@ const airlinesController = {
         });
     } catch (err) {
       const data = {
-        code: 404,
+        code: 500,
         payload: err,
         message: 'failed to delete airlines',
       };
