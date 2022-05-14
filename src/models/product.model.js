@@ -124,7 +124,7 @@ const productModel = {
   }),
   detailProduct: (id) => new Promise((resolve, reject) => {
     db.query(
-      `SELECT products.id, products.airline_id, products.origin, products.destination, products.price, products.stock, products.transit_total, products.flight_date, products.estimation, products.created_date, products.code, products.terminal, products.type, airlines.name, airlines.pic, airlines.phone FROM products INNER JOIN airlines ON products.airline_id = airlines.id WHERE products.id='${id}'`,
+      `SELECT products.id, products.airline_id, products.origin, products.destination, products.price, products.stock, products.transit_total, products.flight_date, products.estimation, products.created_date, products.code, products.terminal, products.gate, products.type, airlines.name, airlines.pic, airlines.phone FROM products INNER JOIN airlines ON products.airline_id = airlines.id WHERE products.id='${id}'`,
       (err, result) => {
         if (err) {
           reject(err);
