@@ -111,17 +111,56 @@ const productModel = {
       },
     );
   }),
-  countAll: () => new Promise((resolve, reject) => {
-    db.query('SELECT COUNT(*) FROM products INNER JOIN airlines ON products.airline_id = airlines.id WHERE products.stock >= 1', (err, result) => {
-      if (err) {
-        reject(err);
-      }
-      resolve(result);
-    });
+  countAll: (
+    transit,
+    airline,
+    minprice,
+    maxprice,
+    origin,
+    destination,
+    type,
+    stock,
+  ) => new Promise((resolve, reject) => {
+    let sql = 'SELECT count(*) FROM products INNER JOIN airlines ON products.airline_id = airlines.id WHERE products.stock >= 1';
+
+    if (transit) {
+      sql += ` AND products.transit_total = ${transit}`;
+    }
+    if (airline) {
+      sql += ` AND airlines.name='${airline}'`;
+    }
+    if (minprice) {
+      sql += ` AND products.price>=${minprice}`;
+    }
+    if (maxprice) {
+      sql += ` AND products.price<=${maxprice}`;
+    }
+    if (origin) {
+      sql += ` AND LOWER(products.origin) LIKE '%${origin.toLowerCase()}%'`;
+    }
+    if (destination) {
+      sql += ` AND LOWER(products.destination) LIKE '%${destination.toLowerCase()}%'`;
+    }
+    if (type) {
+      sql += ` AND LOWER(products.type)='${type.toLowerCase()}'`;
+    }
+    if (stock) {
+      sql += ` AND products.stock>=${stock}`;
+    }
+
+    db.query(
+      sql,
+      (err, result) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(result);
+      },
+    );
   }),
   detailProduct: (id) => new Promise((resolve, reject) => {
     db.query(
-      `SELECT products.id, products.airline_id, products.origin, products.destination, products.price, products.stock, products.transit_total, products.flight_date, products.estimation, products.created_date, products.code, products.terminal, products.gate, products.type, airlines.name, airlines.pic, airlines.phone FROM products INNER JOIN airlines ON products.airline_id = airlines.id WHERE products.id='${id}'`,
+      `SELECT products.id, products.airline_id, products.origin, products.destination, products.price, products.stock, products.transit_total, products.flight_date, products.estimation, products.created_date, products.code, products.terminal, products.gate, products.type, airlines.name, airlines.pic, airlines.phone, airlines.photo FROM products INNER JOIN airlines ON products.airline_id = airlines.id WHERE products.id='${id}'`,
       (err, result) => {
         if (err) {
           reject(err);

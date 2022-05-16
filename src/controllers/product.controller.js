@@ -31,7 +31,16 @@ const productController = {
       const stock = stockFiltered || '';
       const orderBy = sortFiltered || 'created_date';
 
-      const count = await productModel.countAll();
+      const count = await productModel.countAll(
+        transit,
+        airline,
+        minprice,
+        maxprice,
+        origin,
+        destination,
+        type,
+        stock,
+      );
       const paging = createPagination(count.rows[0].count, page, limit);
 
       await productModel
