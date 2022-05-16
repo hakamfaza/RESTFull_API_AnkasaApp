@@ -80,7 +80,7 @@ const transactionsModels = {
     );
   }),
   getBookingDetail: (id) => new Promise((resolve, reject) => {
-    db.query('SELECT airlines.name as airline, airlines.photo, products.origin, products.destination, products.code, products.terminal, products.gate, products.flight_date FROM transactions INNER JOIN products ON transactions.product_id = products.id INNER JOIN airlines ON transactions.airline_id = airlines.id WHERE transactions.id=$1', [id], (err, result) => {
+    db.query('SELECT airlines.name as airline, airlines.photo, products.origin, products.destination, products.code, products.terminal, products.gate, products.flight_date, products.type, transactions.passenger_name, transactions.seat FROM transactions INNER JOIN products ON transactions.product_id = products.id INNER JOIN airlines ON transactions.airline_id = airlines.id WHERE transactions.id=$1', [id], (err, result) => {
       if (err) {
         reject(err);
       }
