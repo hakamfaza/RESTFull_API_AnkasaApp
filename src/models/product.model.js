@@ -112,7 +112,7 @@ const productModel = {
     );
   }),
   countAll: () => new Promise((resolve, reject) => {
-    db.query('SELECT COUNT(*) FROM products INNER JOIN airlines ON products.airline_id = airlines.id', (err, result) => {
+    db.query('SELECT COUNT(*) FROM products INNER JOIN airlines ON products.airline_id = airlines.id WHERE products.stock >= 1', (err, result) => {
       if (err) {
         reject(err);
       }
