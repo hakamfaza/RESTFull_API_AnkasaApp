@@ -6,15 +6,17 @@ const {
   forgot,
   reset,
 } = require('../controllers/auth.controller');
+const authValidation = require('../validations/auth.validation');
+const runValidation = require('../middlewares/runValidation');
 const { isVerified } = require('../middlewares/authorization');
 
 const router = express.Router();
 
 router
-  .post('/auth/register', register)
-  .get('/auth/activation/:token', isVerified, activation)
-  .post('/auth/login', isVerified, login)
-  .put('/auth/forgot', isVerified, forgot)
-  .put('/auth/reset/:token', isVerified, reset);
+  .post('/auth/register', authValidation.register, runValidation, register)
+  .get('/auth/activation/:token', activation)
+  .post('/auth/login', isVerified, authValidation.login, runValidation, login)
+  .put('/auth/forgot', isVerified, authValidation.forgot, runValidation, forgot)
+  .put('/auth/reset/:token', authValidation.reset, runValidation, reset);
 
 module.exports = router;

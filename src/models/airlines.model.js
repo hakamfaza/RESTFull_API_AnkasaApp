@@ -1,7 +1,7 @@
 const db = require('../config/db');
 
 const airlinesModel = {
-  allData: (search) => new Promise((resolve, reject) => {
+  allData: () => new Promise((resolve, reject) => {
     db.query('SELECT COUNT(*) AS total FROM airlines', (err, res) => {
       if (err) {
         reject(err);
@@ -32,9 +32,11 @@ const airlinesModel = {
     const {
       id, file, name, pic, phone, date, isActive,
     } = data;
+
     db.query(
       `INSERT INTO airlines ( photo, name, pic, phone, created_date, id, is_active) 
-            VALUES ('${file}', '${name}','${pic}', '${phone}', '${date}', '${id}',${isActive})`,
+            VALUES ('${file}', '${name}','${pic}', '${phone}', $1, '${id}',${isActive})`,
+      [date],
       (err, res) => {
         if (err) {
           reject(err);
@@ -43,10 +45,16 @@ const airlinesModel = {
       },
     );
   }),
-  updateAirlines: (id, photo, name, pic, phone, date, isActive) => new Promise((resolve, reject) => {
+  updateAirlines: (
+    id,
+    photo,
+    name,
+    pic,
+    phone,
+  ) => new Promise((resolve, reject) => {
     db.query(
       `UPDATE airlines SET photo='${photo}', name='${name}',pic='${pic}'
-                , phone='${phone}', created_date='${date}', is_active='${isActive}' WHERE id='${id}'`,
+                , phone='${phone}' WHERE id='${id}'`,
       (err, res) => {
         if (err) {
           reject(err);

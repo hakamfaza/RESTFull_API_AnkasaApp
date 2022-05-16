@@ -90,18 +90,16 @@ const airlinesController = {
       const id = uuidv4();
       const file = req.file.filename;
       const {
-        name, pic, phone, date,
+        name, pic, phone,
       } = body;
-      if (!file || !name || !pic || !date || !phone) {
-        throw Error('parameter cannot blank');
-      }
+
       const data = {
         id,
         file,
         name,
         pic,
         phone,
-        date,
+        date: new Date(),
         isActive: true,
       };
       airlinesModel
@@ -136,13 +134,13 @@ const airlinesController = {
       const { id } = req.params;
       const photo = req.file.filename;
       const {
-        name, pic, phone, date, isActive,
+        name, pic, phone,
       } = req.body;
       airlinesModel
-        .updateAirlines(id, photo, name, pic, phone, date, isActive)
+        .updateAirlines(id, photo, name, pic, phone)
         .then((result) => {
           const data = {
-            code: 404,
+            code: 200,
             payload: result,
             message: 'success to update airlines',
           };
@@ -172,7 +170,7 @@ const airlinesController = {
         .deleteAirlines(id)
         .then((result) => {
           const data = {
-            code: 404,
+            code: 200,
             payload: result,
             message: 'success to delete airlines',
           };
@@ -180,7 +178,7 @@ const airlinesController = {
         })
         .catch((err) => {
           const data = {
-            code: 404,
+            code: 500,
             payload: err,
             message: 'failed to delete airlines',
           };
@@ -188,7 +186,7 @@ const airlinesController = {
         });
     } catch (err) {
       const data = {
-        code: 404,
+        code: 500,
         payload: err,
         message: 'failed to delete airlines',
       };
@@ -198,13 +196,13 @@ const airlinesController = {
   control: async (req, res) => {
     try {
       const { id } = req.params;
-      const isActive = req.body;
+      const { isActive } = req.body;
       airlinesModel
         .airlinesControl(id, isActive)
         .then((result) => {
           const data = {
-            code: 404,
-            payload: result,
+            code: 200,
+            payload: result.command,
             message: 'managed to change the activeness of the airline',
           };
           success(res, data);

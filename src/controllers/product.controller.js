@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
+const crypto = require('crypto');
 const productModel = require('../models/product.model');
 const { success, failed } = require('../utils/createResponse');
 const createPagination = require('../utils/createPagination');
@@ -7,7 +8,17 @@ const productController = {
   getListProduct: async (req, res) => {
     try {
       const {
-        transitFiltered, airlinesFiltered, minPriceFiltered, maxPriceFiltered, originFiltered, destinationFiltered, seatClassFiltered, page, limit,
+        transitFiltered,
+        airlinesFiltered,
+        minPriceFiltered,
+        maxPriceFiltered,
+        originFiltered,
+        destinationFiltered,
+        typeFiltered,
+        page,
+        limit,
+        stockFiltered,
+        sortFiltered,
       } = req.query;
 
       const transit = transitFiltered || '';
@@ -16,12 +27,26 @@ const productController = {
       const maxprice = maxPriceFiltered || '';
       const origin = originFiltered || '';
       const destination = destinationFiltered || '';
-      const seatClass = seatClassFiltered || '';
+      const type = typeFiltered || '';
+      const stock = stockFiltered || '';
+      const orderBy = sortFiltered || 'created_date';
 
       const count = await productModel.countAll();
       const paging = createPagination(count.rows[0].count, page, limit);
 
-      await productModel.getAllProduct(transit, airline, minprice, maxprice, origin, destination, seatClass)
+      await productModel
+        .getAllProduct(
+          transit,
+          airline,
+          minprice,
+          maxprice,
+          origin,
+          destination,
+          type,
+          stock,
+          orderBy,
+          paging,
+        )
         .then((result) => {
           success(res, {
             code: 200,
@@ -49,47 +74,55 @@ const productController = {
     try {
       const id = uuidv4();
 
-      // Jika sudah ada login maka airline_id diambil dari id admin yang sedang login
-
-      // const airline_id =
-
       const {
-        origin, destination, price, seat_class, stock,
-        transit_total, flight_date, airline_id, estimation,
-        created_date, code, gate, terminal,
-      } = req.body;
-
-      await productModel.storeProduct(
         origin,
         destination,
         price,
-        seat_class,
         stock,
         transit_total,
         flight_date,
         airline_id,
         estimation,
-        created_date,
-        code,
+        type,
         gate,
         terminal,
-        id,
-      )
-        .then((result) => {
+      } = req.body;
+      const created_date = new Date();
+      const code = crypto.randomBytes(3).toString('hex').toUpperCase();
+
+      await productModel
+        .storeProduct(
+          origin,
+          destination,
+          price,
+          type,
+          stock,
+          transit_total,
+          flight_date,
+          airline_id,
+          estimation,
+          created_date,
+          gate,
+          terminal,
+          id,
+          code,
+        )
+        .then(() => {
           success(res, {
             code: 200,
             payload: null,
             message: 'create product success',
           });
-          res.json(res, 'berhasil create');
         })
         .catch((err) => {
-          failed((res, {
-            code: 500,
-            payload: err.message,
-            message: 'failed to create product',
-          }));
-          res.json(res, 'gagal create');
+          failed(
+            (res,
+            {
+              code: 500,
+              payload: err.message,
+              message: 'failed to create product',
+            }),
+          );
         });
     } catch (err) {
       failed(res, {
@@ -97,14 +130,14 @@ const productController = {
         payload: err.message,
         message: 'Internal server error',
       });
-      res.json(err, 'internal server');
     }
   },
   getDetailProduct: async (req, res) => {
     try {
       const { id } = req.params;
 
-      await productModel.detailProduct(id)
+      await productModel
+        .detailProduct(id)
         .then((result) => {
           success(res, {
             code: 200,
@@ -132,27 +165,34 @@ const productController = {
       const productId = req.params.id;
 
       const {
-        origin, destination, price, seat_class, stock,
-        transit_total, flight_date, airline_id, estimation,
-        created_date, code, gate, terminal,
-      } = req.body;
-
-      await productModel.updateProduct(
         origin,
         destination,
         price,
-        seat_class,
         stock,
         transit_total,
         flight_date,
         airline_id,
         estimation,
-        created_date,
-        code,
+        type,
         gate,
         terminal,
-        productId,
-      )
+      } = req.body;
+
+      await productModel
+        .updateProduct(
+          origin,
+          destination,
+          price,
+          type,
+          stock,
+          transit_total,
+          flight_date,
+          airline_id,
+          estimation,
+          gate,
+          terminal,
+          productId,
+        )
         .then((result) => {
           success(res, {
             code: 200,
@@ -161,11 +201,14 @@ const productController = {
           });
         })
         .catch((err) => {
-          failed((res, {
-            code: 500,
-            payload: err.message,
-            message: 'failed to update product',
-          }));
+          failed(
+            (res,
+            {
+              code: 500,
+              payload: err.message,
+              message: 'failed to update product',
+            }),
+          );
         });
     } catch (err) {
       failed(res, {
@@ -173,14 +216,14 @@ const productController = {
         payload: err.message,
         message: 'Internal server error',
       });
-      res.json(err, 'internal server');
     }
   },
   deleteProduct: async (req, res) => {
     try {
       const { id } = req.params;
 
-      productModel.deleteProduct(id)
+      productModel
+        .deleteProduct(id)
         .then((result) => {
           success(res, {
             code: 200,
@@ -203,7 +246,6 @@ const productController = {
       });
     }
   },
-
 };
 
 module.exports = productController;
