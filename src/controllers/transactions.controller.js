@@ -139,6 +139,24 @@ const transactionsController = {
       });
     }
   },
+  getBookingDetail: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const transaction = await transactionsModels.getBookingDetail(id);
+
+      success(res, {
+        code: 200,
+        payload: transaction.rows[0],
+        message: 'success get booking detail!',
+      });
+    } catch (error) {
+      failed(res, {
+        code: 500,
+        payload: error.message,
+        message: 'internal server error!',
+      });
+    }
+  },
 };
 
 module.exports = transactionsController;
