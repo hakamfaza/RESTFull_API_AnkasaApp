@@ -13,11 +13,8 @@ const productModel = {
     orderBy,
     paging,
   ) => new Promise((resolve, reject) => {
-    let sql = 'SELECT products.origin, products.destination, products.price, products.type, products.stock, products.transit_total, products.flight_date, products.airline_id, products.estimation, products.created_date, products.code, products.gate, products.terminal, products.id, airlines.name, airlines.photo FROM products INNER JOIN airlines ON products.airline_id = airlines.id';
+    let sql = 'SELECT products.origin, products.destination, products.price, products.type, products.stock, products.transit_total, products.flight_date, products.airline_id, products.estimation, products.created_date, products.code, products.gate, products.terminal, products.id, airlines.name, airlines.photo FROM products INNER JOIN airlines ON products.airline_id = airlines.id WHERE products.stock >= 1';
 
-    if (transit || airline || minprice || maxprice) {
-      sql += " WHERE products.code LIKE '%%'";
-    }
     if (transit) {
       sql += ` AND products.transit_total = ${transit}`;
     }
@@ -31,10 +28,10 @@ const productModel = {
       sql += ` AND products.price<=${maxprice}`;
     }
     if (origin) {
-      sql += ` AND LOWER(products.origin)='${origin.toLowerCase()}'`;
+      sql += ` AND LOWER(products.origin) LIKE '%${origin.toLowerCase()}%'`;
     }
     if (destination) {
-      sql += ` AND LOWER(products.destination)='${destination.toLowerCase()}'`;
+      sql += ` AND LOWER(products.destination) LIKE '%${destination.toLowerCase()}%'`;
     }
     if (type) {
       sql += ` AND LOWER(products.type)='${type.toLowerCase()}'`;
