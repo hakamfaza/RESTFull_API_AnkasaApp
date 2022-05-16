@@ -1,5 +1,6 @@
 const { v4: uuidv4 } = require('uuid');
 const transactionsModels = require('../models/transactions.models');
+const productModel = require('../models/product.model');
 const { success, failed } = require('../utils/createResponse');
 
 const transactionsController = {
@@ -130,6 +131,33 @@ const transactionsController = {
         code: 200,
         payload: transactions.rows,
         message: 'success get transactions by user!',
+      });
+    } catch (error) {
+      failed(res, {
+        code: 500,
+        payload: error.message,
+        message: 'internal server error!',
+      });
+    }
+  },
+  confirmPaid: async (req, res) => {
+    try {
+      await transactionsModels.paid(req.params.id);
+
+      const transactionData = await transactionsModels.getDetailTransactions(
+        req.params.id,
+      );
+      const productData = await productModel.detailProduct(
+        transactionData.rows[0].product_id,
+      );
+      const minStock = productData.rows[0].stock - transactionData.rows[0].total_order;
+
+      await productModel.reduceStock(productData.rows[0].id, minStock);
+
+      success(res, {
+        code: 200,
+        payload: null,
+        message: 'success paid!',
       });
     } catch (error) {
       failed(res, {
