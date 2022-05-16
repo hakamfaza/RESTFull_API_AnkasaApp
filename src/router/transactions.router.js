@@ -5,6 +5,7 @@ const {
   getDetailTransactions,
   deleteTransactions,
   getTransactionsByUser,
+  getBookingDetail,
   confirmPaid,
 } = require('../controllers/transactions.controller');
 const jwtAuth = require('../middlewares/jwtAuth');
@@ -19,6 +20,7 @@ router
   .get('/transactions/:id', jwtAuth, getDetailTransactions)
   .delete('/transactions/:id', jwtAuth, deleteTransactions)
   .get('/userTransactions', jwtAuth, getTransactionsByUser)
+  .get('/detailTransactions/:id', jwtAuth, getBookingDetail)
   .put('/transactions/:id/paid', jwtAuth, confirmPaid);
 
 module.exports = router;
